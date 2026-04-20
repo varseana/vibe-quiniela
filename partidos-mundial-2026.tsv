@@ -1,0 +1,73 @@
+partido_id	fase	grupo	fecha	hora	local	visitante	gol_local	gol_visitante	status
+M01	Grupos	A	2026-06-11	13:00	Mexico	South Africa			pendiente
+M02	Grupos	A	2026-06-11	20:00	South Korea	Czechia			pendiente
+M03	Grupos	B	2026-06-12	13:00	Canada	Bosnia and Herzegovina			pendiente
+M04	Grupos	D	2026-06-12	19:00	USA	Paraguay			pendiente
+M05	Grupos	B	2026-06-13	13:00	Qatar	Switzerland			pendiente
+M06	Grupos	C	2026-06-13	16:00	Brazil	Morocco			pendiente
+M07	Grupos	C	2026-06-13	19:00	Haiti	Scotland			pendiente
+M08	Grupos	D	2026-06-13	22:00	Australia	Turkiye			pendiente
+M09	Grupos	E	2026-06-14	11:00	Germany	Curacao			pendiente
+M10	Grupos	F	2026-06-14	14:00	Netherlands	Japan			pendiente
+M11	Grupos	E	2026-06-14	17:00	Ivory Coast	Ecuador			pendiente
+M12	Grupos	F	2026-06-14	20:00	Sweden	Tunisia			pendiente
+M13	Grupos	H	2026-06-15	10:00	Spain	Cape Verde			pendiente
+M14	Grupos	G	2026-06-15	13:00	Belgium	Egypt			pendiente
+M15	Grupos	H	2026-06-15	16:00	Saudi Arabia	Uruguay			pendiente
+M16	Grupos	G	2026-06-15	19:00	Iran	New Zealand			pendiente
+M17	Grupos	I	2026-06-16	13:00	France	Senegal			pendiente
+M18	Grupos	I	2026-06-16	16:00	Norway	Iraq			pendiente
+M19	Grupos	J	2026-06-16	19:00	Argentina	Algeria			pendiente
+M20	Grupos	J	2026-06-16	22:00	Austria	Jordan			pendiente
+M21	Grupos	K	2026-06-17	11:00	Portugal	DR Congo			pendiente
+M22	Grupos	L	2026-06-17	14:00	England	Croatia			pendiente
+M23	Grupos	L	2026-06-17	17:00	Ghana	Panama			pendiente
+M24	Grupos	K	2026-06-17	20:00	Uzbekistan	Colombia			pendiente
+M25	Grupos	A	2026-06-18	10:00	South Africa	Czechia			pendiente
+M26	Grupos	B	2026-06-18	13:00	Switzerland	Bosnia and Herzegovina			pendiente
+M27	Grupos	B	2026-06-18	16:00	Canada	Qatar			pendiente
+M28	Grupos	A	2026-06-18	19:00	Mexico	South Korea			pendiente
+M29	Grupos	D	2026-06-19	13:00	USA	Australia			pendiente
+M30	Grupos	C	2026-06-19	13:00	Scotland	Morocco			pendiente
+M31	Grupos	C	2026-06-19	19:00	Brazil	Haiti			pendiente
+M32	Grupos	D	2026-06-19	22:00	Paraguay	Turkiye			pendiente
+M33	Grupos	F	2026-06-20	11:00	Netherlands	Sweden			pendiente
+M34	Grupos	E	2026-06-20	14:00	Germany	Ivory Coast			pendiente
+M35	Grupos	E	2026-06-20	18:00	Ecuador	Curacao			pendiente
+M36	Grupos	F	2026-06-20	22:00	Tunisia	Japan			pendiente
+M37	Grupos	H	2026-06-21	10:00	Spain	Saudi Arabia			pendiente
+M38	Grupos	G	2026-06-21	13:00	Belgium	Iran			pendiente
+M39	Grupos	H	2026-06-21	16:00	Uruguay	Cape Verde			pendiente
+M40	Grupos	G	2026-06-21	19:00	New Zealand	Egypt			pendiente
+M41	Grupos	J	2026-06-22	11:00	Argentina	Austria			pendiente
+M42	Grupos	I	2026-06-22	15:00	France	Iraq			pendiente
+M43	Grupos	I	2026-06-22	18:00	Norway	Senegal			pendiente
+M44	Grupos	J	2026-06-22	21:00	Jordan	Algeria			pendiente
+M45	Grupos	K	2026-06-23	11:00	Portugal	Uzbekistan			pendiente
+M46	Grupos	L	2026-06-23	14:00	England	Ghana			pendiente
+M47	Grupos	L	2026-06-23	17:00	Panama	Croatia			pendiente
+M48	Grupos	K	2026-06-23	20:00	Colombia	DR Congo			pendiente
+M49	Grupos	B	2026-06-24	13:00	Canada	Switzerland			pendiente
+M50	Grupos	B	2026-06-24	13:00	Qatar	Bosnia and Herzegovina			pendiente
+M51	Grupos	C	2026-06-24	16:00	Scotland	Brazil			pendiente
+M52	Grupos	C	2026-06-24	16:00	Morocco	Haiti			pendiente
+M53	Grupos	A	2026-06-24	19:00	Mexico	Czechia			pendiente
+M54	Grupos	A	2026-06-24	19:00	South Korea	South Africa			pendiente
+M55	Grupos	E	2026-06-25	14:00	Ecuador	Germany			pendiente
+M56	Grupos	E	2026-06-25	14:00	Curacao	Ivory Coast			pendiente
+M57	Grupos	F	2026-06-25	17:00	Tunisia	Netherlands			pendiente
+M58	Grupos	F	2026-06-25	17:00	Japan	Sweden			pendiente
+M59	Grupos	D	2026-06-25	20:00	USA	Turkiye			pendiente
+M60	Grupos	D	2026-06-25	20:00	Paraguay	Australia			pendiente
+M61	Grupos	I	2026-06-26	13:00	Norway	France			pendiente
+M62	Grupos	I	2026-06-26	13:00	Senegal	Iraq			pendiente
+M63	Grupos	H	2026-06-26	18:00	Uruguay	Spain			pendiente
+M64	Grupos	H	2026-06-26	18:00	Cape Verde	Saudi Arabia			pendiente
+M65	Grupos	G	2026-06-26	21:00	New Zealand	Belgium			pendiente
+M66	Grupos	G	2026-06-26	21:00	Egypt	Iran			pendiente
+M67	Grupos	L	2026-06-27	15:00	Panama	England			pendiente
+M68	Grupos	L	2026-06-27	15:00	Croatia	Ghana			pendiente
+M69	Grupos	K	2026-06-27	17:30	Colombia	Portugal			pendiente
+M70	Grupos	K	2026-06-27	17:30	Uzbekistan	DR Congo			pendiente
+M71	Grupos	J	2026-06-27	20:00	Jordan	Argentina			pendiente
+M72	Grupos	J	2026-06-27	20:00	Algeria	Austria			pendiente

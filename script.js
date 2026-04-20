@@ -119,6 +119,21 @@ async function loadPartidos() {
   } catch { document.getElementById('partidosGrid').innerHTML = '<div class="glass-card partido-card"><p class="placeholder-text">No se pudieron cargar los partidos</p></div>'; }
 }
 
+function formatFecha(f) {
+  if (!f) return '';
+  const d = new Date(f);
+  if (isNaN(d)) return f;
+  return d.toLocaleDateString('es-CR', { month: 'short', day: 'numeric' });
+}
+
+function formatHora(h) {
+  if (!h) return '';
+  // google sheets serializes time as 1899-12-30T HH:MM
+  const m = String(h).match(/T(\d{2}:\d{2})/);
+  if (m) return m[1];
+  return h;
+}
+
 function renderPartidos(partidos) {
   const grid = document.getElementById('partidosGrid');
   if (!partidos.length) { grid.innerHTML = '<div class="glass-card partido-card"><p class="placeholder-text">No hay partidos registrados aun</p></div>'; return; }
@@ -133,7 +148,7 @@ function renderPartidos(partidos) {
         ${p.status === 'finalizado' ? `<div class="partido-score">${p.gol_local} - ${p.gol_visitante}</div>` : '<div class="partido-vs">vs</div>'}
         <div class="partido-team">${p.visitante}</div>
       </div>
-      <div class="partido-date">${p.fecha} ${p.hora || ''}</div>
+      <div class="partido-date">${formatFecha(p.fecha)} - ${formatHora(p.hora)}</div>
     </div>
   `).join('');
 }
