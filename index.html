@@ -1,181 +1,150 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIBE Quiniela - Mundial 2026</title>
+<title>VIBE Quiniela - World Cup 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
 <div class="particles" id="particles"></div>
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 <div class="blob blob-3"></div>
 
-<!-- nav -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <div class="nav-brand">
-      <img src="vibe-logo.png" alt="VIBE" class="nav-logo-img">
-    </div>
+    <div class="nav-brand"><img src="vibe-logo.png" alt="VIBE" class="nav-logo-img"></div>
     <div class="nav-links" id="navLinks">
-      <a href="#home" class="nav-link active">Home</a>
-      <a href="#partidos" class="nav-link">Partidos</a>
+      <a href="#home" class="nav-link active" data-i18n="nav_home">Home</a>
+      <a href="#champion" class="nav-link" data-i18n="nav_champion">Champion</a>
+      <a href="#partidos" class="nav-link" data-i18n="nav_matches">Matches</a>
       <a href="#leaderboard" class="nav-link">Leaderboard</a>
-      <a href="#reglas" class="nav-link">Reglas</a>
+      <a href="#reglas" class="nav-link" data-i18n="nav_rules">Rules</a>
       <div class="nav-glider" id="navGlider"></div>
     </div>
-    <div class="nav-user" id="navUser">
-      <button class="btn btn-glow btn-sm" id="btnLogin">Registrarse</button>
+    <div class="nav-right">
+      <button class="lang-toggle" id="langToggle">ES</button>
+      <div class="nav-user" id="navUser">
+        <button class="btn btn-glow btn-sm" id="btnLogin" data-i18n="nav_register">Register</button>
+      </div>
     </div>
   </div>
 </nav>
 
-<!-- hero -->
 <section class="section hero" id="home">
   <div class="hero-content">
     <img src="vibe-logo.png" alt="VIBE" class="hero-logo">
-    <h1 class="hero-title">
-      <span class="gradient-text">Quiniela Mundial 2026</span>
-    </h1>
-    <p class="hero-subtitle">Predice los resultados del Mundial USA/Mexico/Canada. Compite con todo TSE. Gana premios.</p>
+    <h1 class="hero-title"><span class="gradient-text" data-i18n="hero_title">World Cup Predictions 2026</span></h1>
+    <p class="hero-subtitle" data-i18n="hero_sub">Predict the results of the FIFA World Cup USA/Mexico/Canada. Compete with all of TSE. Win prizes.</p>
     <div class="countdown" id="countdown">
-      <div class="countdown-item"><span class="countdown-num" id="cdDays">--</span><span class="countdown-label">Dias</span></div>
-      <div class="countdown-item"><span class="countdown-num" id="cdHours">--</span><span class="countdown-label">Horas</span></div>
+      <div class="countdown-item"><span class="countdown-num" id="cdDays">--</span><span class="countdown-label" data-i18n="days">Days</span></div>
+      <div class="countdown-item"><span class="countdown-num" id="cdHours">--</span><span class="countdown-label" data-i18n="hours">Hours</span></div>
       <div class="countdown-item"><span class="countdown-num" id="cdMins">--</span><span class="countdown-label">Min</span></div>
-      <div class="countdown-item"><span class="countdown-num" id="cdSecs">--</span><span class="countdown-label">Seg</span></div>
+      <div class="countdown-item"><span class="countdown-num" id="cdSecs">--</span><span class="countdown-label">Sec</span></div>
     </div>
     <div class="hero-actions">
-      <button class="btn btn-glow" id="btnRegister">Unirme a la Quiniela</button>
-      <a href="#reglas" class="btn btn-glass">Ver Reglas</a>
+      <button class="btn btn-glow" id="btnRegister" data-i18n="hero_join">Join the Pool</button>
+      <a href="#reglas" class="btn btn-glass" data-i18n="hero_rules">View Rules</a>
     </div>
   </div>
 </section>
 
-<!-- partidos -->
+<section class="section section-alt" id="champion">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge" data-i18n="champ_badge">Bonus</span>
+      <h2 class="section-title"><span class="gradient-text" data-i18n="champ_title">Pick Your Champion</span></h2>
+      <p class="section-desc" data-i18n="champ_desc">Choose who you think will win the World Cup. Worth 10 bonus points. Locks when the tournament starts.</p>
+    </div>
+    <div class="glass-card champion-card">
+      <div class="champion-inner" id="championInner">
+        <select id="championSelect" class="champion-select"><option value="">-- Select a team --</option></select>
+        <button class="btn btn-glow" id="btnChampion" data-i18n="champ_save">Save Pick</button>
+      </div>
+      <div class="champion-current" id="championCurrent"></div>
+      <div class="champion-locked" id="championLocked" style="display:none"><span data-i18n="champ_locked">Predictions are locked. The tournament has started.</span></div>
+      <p class="form-msg" id="championMsg"></p>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="partidos">
   <div class="container">
     <div class="section-header">
-      <span class="section-badge">Partidos</span>
-      <h2 class="section-title"><span class="gradient-text">Fase de Grupos</span></h2>
+      <span class="section-badge" data-i18n="match_badge">Matches</span>
+      <h2 class="section-title"><span class="gradient-text" data-i18n="match_title">Group Stage</span></h2>
     </div>
     <div class="partidos-filters">
-      <button class="filter-btn active" data-filter="all">Todos</button>
-      <button class="filter-btn" data-filter="pendiente">Pendientes</button>
-      <button class="filter-btn" data-filter="finalizado">Finalizados</button>
+      <button class="filter-btn active" data-filter="all" data-i18n="filter_all">All</button>
+      <button class="filter-btn" data-filter="pendiente" data-i18n="filter_pending">Pending</button>
+      <button class="filter-btn" data-filter="finalizado" data-i18n="filter_done">Finished</button>
     </div>
     <div class="partidos-grid" id="partidosGrid">
-      <div class="glass-card partido-card placeholder-card">
-        <p class="placeholder-text">Cargando partidos...</p>
-      </div>
+      <div class="glass-card partido-card placeholder-card"><p class="placeholder-text" data-i18n="loading">Loading...</p></div>
     </div>
   </div>
 </section>
 
-<!-- leaderboard -->
 <section class="section section-alt" id="leaderboard">
   <div class="container">
     <div class="section-header">
       <span class="section-badge">Leaderboard</span>
-      <h2 class="section-title"><span class="gradient-text">Tabla de Posiciones</span></h2>
+      <h2 class="section-title"><span class="gradient-text" data-i18n="lb_title">Standings</span></h2>
     </div>
     <div class="glass-card leaderboard-card">
       <table class="leaderboard-table" id="leaderboardTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Jugador</th>
-            <th>Exactos</th>
-            <th>Aciertos</th>
-            <th>Puntos</th>
-          </tr>
-        </thead>
-        <tbody id="leaderboardBody">
-          <tr><td colspan="5" class="placeholder-text">Cargando...</td></tr>
-        </tbody>
+        <thead><tr><th>#</th><th data-i18n="lb_player">Player</th><th data-i18n="lb_exact">Exact</th><th data-i18n="lb_correct">Correct</th><th data-i18n="lb_champ">Champ</th><th data-i18n="lb_pts">Points</th></tr></thead>
+        <tbody id="leaderboardBody"><tr><td colspan="6" class="placeholder-text" data-i18n="loading">Loading...</td></tr></tbody>
       </table>
     </div>
   </div>
 </section>
 
-<!-- reglas -->
 <section class="section" id="reglas">
   <div class="container">
     <div class="section-header">
-      <span class="section-badge">Reglas</span>
-      <h2 class="section-title"><span class="gradient-text">Sistema de Puntos</span></h2>
+      <span class="section-badge" data-i18n="rules_badge">Rules</span>
+      <h2 class="section-title"><span class="gradient-text" data-i18n="rules_title">Point System</span></h2>
     </div>
     <div class="reglas-grid">
-      <div class="glass-card regla-card">
-        <div class="regla-pts">5 pts</div>
-        <h4 class="regla-title">Resultado Exacto</h4>
-        <p class="regla-desc">Acertar el marcador exacto del partido. Ej: predecir 2-1 y el resultado es 2-1.</p>
-      </div>
-      <div class="glass-card regla-card">
-        <div class="regla-pts">2 pts</div>
-        <h4 class="regla-title">Acertar Ganador</h4>
-        <p class="regla-desc">Acertar quien gana o si es empate, sin acertar el marcador exacto.</p>
-      </div>
-      <div class="glass-card regla-card">
-        <div class="regla-pts">0 pts</div>
-        <h4 class="regla-title">Fallo</h4>
-        <p class="regla-desc">No acertar ni el ganador ni el marcador. Mejor suerte en el siguiente partido.</p>
-      </div>
+      <div class="glass-card regla-card"><div class="regla-pts">5 pts</div><h4 class="regla-title" data-i18n="r_exact">Exact Result</h4><p class="regla-desc" data-i18n="r_exact_d">Predict the exact score. E.g. you predict 2-1 and the result is 2-1.</p></div>
+      <div class="glass-card regla-card"><div class="regla-pts">2 pts</div><h4 class="regla-title" data-i18n="r_winner">Correct Winner</h4><p class="regla-desc" data-i18n="r_winner_d">Predict who wins or a draw, without getting the exact score.</p></div>
+      <div class="glass-card regla-card"><div class="regla-pts">10 pts</div><h4 class="regla-title" data-i18n="r_champ">Champion Bonus</h4><p class="regla-desc" data-i18n="r_champ_d">Correctly predict the World Cup winner. Must be locked before the tournament starts.</p></div>
     </div>
     <div class="glass-card reglas-extra">
-      <h4 class="regla-title">Reglas Generales</h4>
+      <h4 class="regla-title" data-i18n="r_general">General Rules</h4>
       <ul class="reglas-list">
-        <li>Las predicciones se cierran 1 hora antes de cada partido.</li>
-        <li>Solo se puede enviar una prediccion por partido.</li>
-        <li>Se puede modificar la prediccion antes del cierre.</li>
-        <li>En caso de empate en puntos, gana quien tenga mas resultados exactos.</li>
-        <li>Los premios se anuncian al inicio del torneo.</li>
+        <li data-i18n="r1">Predictions close 1 hour before each match.</li>
+        <li data-i18n="r2">Only one prediction per match.</li>
+        <li data-i18n="r3">You can modify your prediction before the deadline.</li>
+        <li data-i18n="r4">Tiebreaker: most exact results wins.</li>
+        <li data-i18n="r5">Prizes will be announced at the start of the tournament.</li>
+        <li data-i18n="r6">Champion pick locks on June 11, 2026. No changes after that.</li>
       </ul>
     </div>
   </div>
 </section>
 
-<!-- register modal -->
 <div class="modal-overlay" id="modalOverlay">
-  <div class="glass-card modal" id="registerModal">
-    <div class="modal-header">
-      <h3 class="gradient-text">Registro</h3>
-      <button class="modal-close" id="modalClose">&times;</button>
-    </div>
+  <div class="glass-card modal">
+    <div class="modal-header"><h3 class="gradient-text" data-i18n="reg_title">Register</h3><button class="modal-close" id="modalClose">&times;</button></div>
     <form id="registerForm">
-      <div class="form-group">
-        <label>Alias (de Amazon)</label>
-        <input type="text" id="regAlias" required maxlength="20" placeholder="ej: varseana">
-      </div>
-      <div class="form-group">
-        <label>Nombre completo</label>
-        <input type="text" id="regNombre" required placeholder="ej: Sean Vargas">
-      </div>
-      <div class="form-group">
-        <label>Email (el de Amazon)</label>
-        <input type="email" id="regEmail" required placeholder="ej: username@amazon.com">
-      </div>
-      <div class="form-group">
-        <label>Equipo favorito (opcional)</label>
-        <input type="text" id="regEquipo" placeholder="ej: Costa Rica">
-      </div>
-      <button type="submit" class="btn btn-glow btn-full">Registrarme</button>
+      <div class="form-group"><label data-i18n="reg_alias">Alias (Amazon)</label><input type="text" id="regAlias" required maxlength="20" placeholder="e.g. varseana"></div>
+      <div class="form-group"><label data-i18n="reg_name">Full Name</label><input type="text" id="regNombre" required placeholder="e.g. Sean Vargas"></div>
+      <div class="form-group"><label data-i18n="reg_email">Email (Amazon)</label><input type="email" id="regEmail" required placeholder="e.g. username@amazon.com"></div>
+      <div class="form-group"><label data-i18n="reg_team">Favorite Team (optional)</label><input type="text" id="regEquipo" placeholder="e.g. Costa Rica"></div>
+      <button type="submit" class="btn btn-glow btn-full" data-i18n="reg_submit">Register</button>
       <p class="form-msg" id="formMsg"></p>
     </form>
   </div>
 </div>
 
-<!-- predict modal -->
 <div class="modal-overlay" id="predictOverlay">
-  <div class="glass-card modal" id="predictModal">
-    <div class="modal-header">
-      <h3 class="gradient-text" id="predictTitle">Prediccion</h3>
-      <button class="modal-close" id="predictClose">&times;</button>
-    </div>
-    <div class="predict-match" id="predictMatch"></div>
+  <div class="glass-card modal">
+    <div class="modal-header"><h3 class="gradient-text" id="predictTitle">Prediction</h3><button class="modal-close" id="predictClose">&times;</button></div>
     <form id="predictForm">
       <input type="hidden" id="predPartidoId">
       <div class="predict-score">
@@ -183,24 +152,20 @@
         <input type="number" id="predGolLocal" min="0" max="20" required class="score-input">
         <span class="score-vs">vs</span>
         <input type="number" id="predGolVisitante" min="0" max="20" required class="score-input">
-        <div class="predict-team" id="predVisitante">Visitante</div>
+        <div class="predict-team" id="predVisitante">Away</div>
       </div>
-      <button type="submit" class="btn btn-glow btn-full">Enviar Prediccion</button>
+      <button type="submit" class="btn btn-glow btn-full" data-i18n="pred_submit">Submit Prediction</button>
       <p class="form-msg" id="predictMsg"></p>
     </form>
   </div>
 </div>
 
-<!-- footer -->
 <footer class="footer">
   <div class="container footer-inner">
-    <div class="footer-brand">
-      <img src="vibe-logo.png" alt="VIBE" class="footer-logo">
-    </div>
+    <div class="footer-brand"><img src="vibe-logo.png" alt="VIBE" class="footer-logo"></div>
     <div class="footer-copy">VIBE TSE - Visibility | Information | Bridge | Engagement</div>
   </div>
 </footer>
-
 <script src="script.js"></script>
 </body>
 </html>
