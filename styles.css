@@ -144,9 +144,9 @@ body {
 .placeholder-text { text-align: center; color: var(--text-muted); padding: var(--sp-8); }
 
 /* leaderboard */
-.leaderboard-card { padding: 0; overflow: hidden; }
+.leaderboard-card { padding: 0; overflow: hidden; max-height: 400px; overflow-y: auto; }
 .leaderboard-table { width: 100%; border-collapse: collapse; }
-.leaderboard-table th { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: var(--sp-4) var(--sp-5); text-align: left; border-bottom: 1px solid var(--divider); }
+.leaderboard-table th { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: var(--sp-4) var(--sp-5); text-align: left; border-bottom: 1px solid var(--divider); position: sticky; top: 0; background: var(--bg-secondary); z-index: 1; }
 .leaderboard-table td { padding: var(--sp-3) var(--sp-5); font-size: 14px; border-bottom: 1px solid var(--divider); }
 .leaderboard-table tr:hover td { background: var(--surface-hover); }
 .leaderboard-table .rank-1 td { background: rgba(155,48,255,0.08); }
