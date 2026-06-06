@@ -145,6 +145,10 @@ body {
 
 /* leaderboard */
 .leaderboard-card { padding: 0; overflow: hidden; max-height: 400px; overflow-y: auto; }
+.leaderboard-card::-webkit-scrollbar { width: 6px; }
+.leaderboard-card::-webkit-scrollbar-track { background: transparent; }
+.leaderboard-card::-webkit-scrollbar-thumb { background: rgba(155,48,255,0.3); border-radius: 3px; }
+.leaderboard-card::-webkit-scrollbar-thumb:hover { background: rgba(155,48,255,0.5); }
 .leaderboard-table { width: 100%; border-collapse: collapse; }
 .leaderboard-table th { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: var(--sp-4) var(--sp-5); text-align: left; border-bottom: 1px solid var(--divider); position: sticky; top: 0; background: var(--bg-secondary); z-index: 1; }
 .leaderboard-table td { padding: var(--sp-3) var(--sp-5); font-size: 14px; border-bottom: 1px solid var(--divider); }
