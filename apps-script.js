@@ -3,7 +3,7 @@
 // Deploy > Manage deployments > Edit (lapiz) > Version: New version > Deploy
 
 const SHEET_ID = '1rzB-X7mSPsExzh4Trh2mLuB-UF7EaCAQu6FYxLxLtoY';
-const LOCK_DATE = new Date('2026-06-11T06:00:00Z'); // june 11 CST = UTC-6
+const LOCK_DATE = new Date('2026-06-25T05:59:00Z'); // Jun 24 23:59 CST (Costa Rica)
 
 function getSheet(name) {
   const ss = SpreadsheetApp.openById(SHEET_ID);

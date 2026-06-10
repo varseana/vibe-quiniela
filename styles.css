@@ -217,6 +217,10 @@ body {
 .section-desc { font-size: 15px; color: var(--text-secondary); margin-top: var(--sp-4); max-width: 500px; margin-inline: auto; }
 .champion-card { padding: var(--sp-8) var(--sp-7); text-align: center; max-width: 500px; margin: 0 auto; }
 .champion-inner { display: flex; align-items: center; justify-content: center; gap: var(--sp-4); flex-wrap: wrap; }
+.countdown-started { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--vibe-purple); }
+.champ-countdown { margin-top: var(--sp-5); padding: var(--sp-3) var(--sp-5); border-radius: 50px; background: rgba(155,48,255,0.08); border: 1px solid rgba(155,48,255,0.2); display: inline-block; }
+.champ-cd-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+.champ-cd-time { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--vibe-purple); font-variant-numeric: tabular-nums; }
 .champion-select {
   padding: var(--sp-4) var(--sp-6); background: var(--bg); border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm); color: var(--vibe-purple); font-size: 16px; font-weight: 600;

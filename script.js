@@ -1,6 +1,6 @@
 // VIBE Quiniela Mundial 2026
 const API_URL = 'https://script.google.com/macros/s/AKfycbz8n6l5VVuka3r8yJFXyNsO1i2sAKEBqolcteCx95O90y4FCpnqo66Zh4BKHRUhGCY8/exec';
-const LOCK_DATE = new Date('2026-06-11T00:00:00-06:00'); // CST
+const LOCK_DATE = new Date('2026-06-25T05:59:00Z'); // Jun 24 23:59 CST (Costa Rica)
 
 // 48 teams
 const TEAMS = ['Algeria','Argentina','Australia','Austria','Belgium','Bosnia and Herzegovina','Brazil','Canada','Cape Verde','Colombia','Croatia','Curacao','Czech Republic','DR Congo','Ecuador','Egypt','England','France','Germany','Ghana','Haiti','Iran','Iraq','Ivory Coast','Japan','Jordan','Mexico','Morocco','Netherlands','New Zealand','Norway','Panama','Paraguay','Portugal','Qatar','Saudi Arabia','Scotland','Senegal','South Africa','South Korea','Spain','Sweden','Switzerland','Tunisia','Turkiye','Uruguay','USA','Uzbekistan'];
@@ -20,7 +20,7 @@ const T = {
     r_champ:'Champion Bonus', r_champ_d:'Correctly predict the World Cup winner. Must be locked before the tournament starts.',
     r_general:'General Rules',
     r1:'Predictions close 1 hour before each match.', r2:'Only one prediction per match.', r3:'You can modify your prediction before the deadline.',
-    r4:'Tiebreaker: most exact results wins.', r5:'Prizes will be announced at the start of the tournament.', r6:'Champion pick locks on June 11, 2026. No changes after that.',
+    r4:'Tiebreaker: most exact results wins.', r5:'Prizes will be announced at the start of the tournament.', r6:'Champion pick locks on June 24, 2026. No changes after that.',
     reg_title:'Register', reg_alias:'Alias (Amazon)', reg_name:'Full Name', reg_email:'Email (Amazon)', reg_team:'Favorite Team (optional)', reg_submit:'Register',
     reg_password:'Password', reg_password_confirm:'Confirm Password', password_mismatch:'Passwords do not match', password_short:'Password must be at least 4 characters',
     login_title:'Login', login_alias:'Alias', login_password:'Password', login_submit:'Login', login_switch:'Don\'t have an account? Register',
@@ -43,7 +43,7 @@ const T = {
     r_champ:'Bonus Campeon', r_champ_d:'Acertar el campeon del Mundial. Debe estar bloqueado antes de que inicie el torneo.',
     r_general:'Reglas Generales',
     r1:'Las predicciones se cierran 1 hora antes de cada partido.', r2:'Solo una prediccion por partido.', r3:'Se puede modificar la prediccion antes del cierre.',
-    r4:'Desempate: gana quien tenga mas resultados exactos.', r5:'Los premios se anuncian al inicio del torneo.', r6:'La prediccion de campeon se bloquea el 11 de junio, 2026.',
+    r4:'Desempate: gana quien tenga mas resultados exactos.', r5:'Los premios se anuncian al inicio del torneo.', r6:'La prediccion de campeon se bloquea el 24 de junio, 2026.',
     reg_title:'Registro', reg_alias:'Alias (de Amazon)', reg_name:'Nombre Completo', reg_email:'Email (de Amazon)', reg_team:'Equipo favorito (opcional)', reg_submit:'Registrarme',
     reg_password:'Contrasena', reg_password_confirm:'Confirmar Contrasena', password_mismatch:'Las contrasenas no coinciden', password_short:'La contrasena debe tener al menos 4 caracteres',
     login_title:'Ingresar', login_alias:'Alias', login_password:'Contrasena', login_submit:'Ingresar', login_switch:'No tienes cuenta? Registrate',
@@ -93,12 +93,34 @@ async function apiPost(data) { return (await fetch(API_URL, { method: 'POST', bo
 // countdown
 function startCountdown() {
   const target = new Date('2026-06-11T00:00:00-06:00');
+  const cdEl = document.getElementById('countdown');
   function tick() {
     const diff = Math.max(0, target - new Date());
+    if (diff === 0) {
+      cdEl.innerHTML = '<div class="countdown-started">The World Cup has started!</div>';
+      return;
+    }
     document.getElementById('cdDays').textContent = String(Math.floor(diff / 86400000)).padStart(2, '0');
     document.getElementById('cdHours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
     document.getElementById('cdMins').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
     document.getElementById('cdSecs').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+  }
+  tick(); setInterval(tick, 1000);
+}
+
+// champion deadline countdown
+function startChampionCountdown() {
+  const el = document.getElementById('champCountdown');
+  if (!el) return;
+  function tick() {
+    const diff = Math.max(0, LOCK_DATE - new Date());
+    if (diff === 0) { el.innerHTML = '<span class="champ-cd-label">Champion picks are locked!</span>'; return; }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    el.innerHTML = '<span class="champ-cd-label">Extended Deadline:</span> <span class="champ-cd-time">' +
+      (d > 0 ? d + 'd ' : '') + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + '</span>';
   }
   tick(); setInterval(tick, 1000);
 }
@@ -137,7 +159,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
   msg.textContent = t('registering'); msg.className = 'form-msg';
   try {
     const hash = await hashPassword(pw);
-    const res = await apiPost({ action:'register', alias:document.getElementById('regAlias').value.trim(), nombre:document.getElementById('regNombre').value.trim(), email:document.getElementById('regEmail').value.trim(), equipo:document.getElementById('regEquipo').value.trim(), password_hash:hash });
+    const res = await apiPost({ action:'register', alias:document.getElementById('regAlias').value.trim(), nombre:document.getElementById('regNombre').value.trim(), email:document.getElementById('regEmail').value.trim(), equipo:'', password_hash:hash });
     if (res.error) { msg.textContent = res.error; msg.className = 'form-msg error'; return; }
     setUser({ id: res.id, alias: res.alias, nombre: res.nombre });
     msg.textContent = t('registered'); msg.className = 'form-msg success';
@@ -366,4 +388,4 @@ window.addEventListener('scroll', () => {
 navLinks.forEach(l=>{l.addEventListener('mouseenter',()=>moveGlider(l));l.addEventListener('mouseleave',()=>{const a=document.querySelector('.nav-link.active');if(a)moveGlider(a);else glider.classList.remove('visible');});});
 
 // init
-startCountdown(); populateTeams(); setLang(lang); updateUserUI(); updateChampionUI(); loadPartidos(); loadLeaderboard();
+startCountdown(); startChampionCountdown(); populateTeams(); setLang(lang); updateUserUI(); updateChampionUI(); loadPartidos(); loadLeaderboard();
