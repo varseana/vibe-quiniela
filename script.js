@@ -419,8 +419,10 @@ async function loadLeaderboard() {
     body.innerHTML = data.map((p, i) => {
       const isMe = u && p.alias.toLowerCase() === u.alias.toLowerCase();
       const cls = (i<3?'rank-'+(i+1):'') + (isMe?' current-user':'');
+      const crown = i === 0 ? '<span class="rank-crown">&#128081;</span>' : '';
+      const rankCell = (i+1) + crown;
       const name = isMe ? `<span class="user-alias">${p.alias}</span><span class="you-badge">You</span>` : p.alias;
-      return `<tr class="${cls}"><td class="rank-num">${i+1}</td><td>${name}</td><td>${p.exactos}</td><td>${p.aciertos}</td><td>${p.campeon||''}</td><td class="pts-num">${p.puntos}</td></tr>`;
+      return `<tr class="${cls}"><td class="rank-num">${rankCell}</td><td>${name}</td><td>${p.exactos}</td><td>${p.aciertos}</td><td>${p.campeon||''}</td><td class="pts-num">${p.puntos}</td></tr>`;
     }).join('');
   } catch { document.getElementById('leaderboardBody').innerHTML = '<tr><td colspan="6" class="placeholder-text">Error</td></tr>'; }
 }

@@ -172,11 +172,36 @@ body {
 .leaderboard-table tr.current-user td:first-child::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, var(--vibe-purple), var(--vibe-magenta)); border-radius: 0 2px 2px 0; }
 .leaderboard-table tr.current-user .user-alias { font-weight: 700; color: var(--vibe-purple); }
 .leaderboard-table tr.current-user .you-badge { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 50px; margin-left: 8px; background: rgba(155,48,255,0.2); color: var(--vibe-purple); }
-.leaderboard-table .rank-1 td { background: rgba(155,48,255,0.08); }
-.leaderboard-table .rank-2 td { background: rgba(200,80,192,0.06); }
-.leaderboard-table .rank-3 td { background: rgba(65,88,208,0.06); }
+.leaderboard-table .rank-1, .leaderboard-table .rank-2, .leaderboard-table .rank-3 { position: relative; }
+.leaderboard-table .rank-1::after, .leaderboard-table .rank-2::after, .leaderboard-table .rank-3::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; pointer-events: none; z-index: 0; }
+.leaderboard-table .rank-1::after { background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent); animation: shimmer 3s ease-in-out infinite; }
+.leaderboard-table .rank-2::after { background: linear-gradient(90deg, transparent, rgba(192,192,220,0.08), transparent); animation: shimmer 4s ease-in-out 1s infinite; }
+.leaderboard-table .rank-3::after { background: linear-gradient(90deg, transparent, rgba(205,127,50,0.08), transparent); animation: shimmer 5s ease-in-out 2s infinite; }
+@keyframes shimmer { 0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; } }
+.leaderboard-table .rank-1 td { background: rgba(255,215,0,0.06); }
+.leaderboard-table .rank-1 td:first-child { position: relative; }
+.leaderboard-table .rank-1 td:first-child::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #ffd700, #ffed4a); border-radius: 0 2px 2px 0; }
+.leaderboard-table .rank-1 .rank-num { color: #ffd700; }
+.leaderboard-table .rank-1 .rank-crown { margin-left: 4px; }
+.leaderboard-table .rank-2 td { background: rgba(192,192,220,0.06); }
+.leaderboard-table .rank-2 td:first-child { position: relative; }
+.leaderboard-table .rank-2 td:first-child::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #c0c0dc, #e8e8f0); border-radius: 0 2px 2px 0; }
+.leaderboard-table .rank-2 .rank-num { color: #c0c0dc; }
+.leaderboard-table .rank-3 td { background: rgba(205,127,50,0.06); }
+.leaderboard-table .rank-3 td:first-child { position: relative; }
+.leaderboard-table .rank-3 td:first-child::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #cd7f32, #daa06d); border-radius: 0 2px 2px 0; }
+.leaderboard-table .rank-3 .rank-num { color: #cd7f32; }
 .rank-num { font-family: var(--font-display); font-weight: 700; }
 .pts-num { font-family: var(--font-display); font-weight: 700; color: var(--vibe-purple); }
+tr.rank-1.current-user td { background: rgba(255,215,0,0.12); border-top: 1px solid rgba(255,215,0,0.4); border-bottom: 1px solid rgba(255,215,0,0.4); }
+tr.rank-1.current-user .you-badge { background: rgba(255,215,0,0.2); color: #ffd700; }
+tr.rank-1.current-user .user-alias { color: #ffd700; }
+tr.rank-2.current-user td { background: rgba(192,192,220,0.12); border-top: 1px solid rgba(192,192,220,0.4); border-bottom: 1px solid rgba(192,192,220,0.4); }
+tr.rank-2.current-user .you-badge { background: rgba(192,192,220,0.2); color: #c0c0dc; }
+tr.rank-2.current-user .user-alias { color: #c0c0dc; }
+tr.rank-3.current-user td { background: rgba(205,127,50,0.12); border-top: 1px solid rgba(205,127,50,0.4); border-bottom: 1px solid rgba(205,127,50,0.4); }
+tr.rank-3.current-user .you-badge { background: rgba(205,127,50,0.2); color: #cd7f32; }
+tr.rank-3.current-user .user-alias { color: #cd7f32; }
 
 /* reglas */
 .reglas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-6); margin-bottom: var(--sp-7); }
