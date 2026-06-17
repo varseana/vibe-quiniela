@@ -331,9 +331,10 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
   .partidos-grid { grid-template-columns: 1fr; }
   .partidos-filters { overflow-x: auto; justify-content: flex-start; padding-bottom: var(--sp-2); -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .partidos-filters::-webkit-scrollbar { display: none; }
-  .leaderboard-card { max-height: none; }
+  .leaderboard-card { max-height: 400px; overflow: hidden; }
   .leaderboard-card table { min-width: 500px; }
-  .leaderboard-card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .leaderboard-card { overflow-x: auto; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .leaderboard-table .rank-1::after, .leaderboard-table .rank-2::after, .leaderboard-table .rank-3::after { display: none; }
   .footer-inner { flex-direction: column; gap: var(--sp-3); text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
