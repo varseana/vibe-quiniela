@@ -79,9 +79,14 @@ function getUser() { try { return JSON.parse(localStorage.getItem('vibe_user'));
 function setUser(u) { localStorage.setItem('vibe_user', JSON.stringify(u)); updateUserUI(); }
 function logout() { localStorage.removeItem('vibe_user'); updateUserUI(); updateChampionUI(); }
 function updateUserUI() {
-  const u = getUser(), nav = document.getElementById('navUser');
-  if (u) nav.innerHTML = `<span class="user-alias">${u.alias}</span> <button class="btn btn-glass btn-sm" onclick="openChangePassword()">${t('btn_change_pw')}</button> <button class="btn btn-glass btn-sm" onclick="logout()">${t('btn_logout')}</button>`;
-  else nav.innerHTML = `<button class="btn btn-glass btn-sm" onclick="openLogin()">${t('nav_login')}</button> <button class="btn btn-glow btn-sm" onclick="openRegister()">${t('nav_register')}</button>`;
+  const u = getUser(), nav = document.getElementById('navUser'), mu = document.getElementById('mobileUser');
+  if (u) {
+    nav.innerHTML = `<span class="user-alias">${u.alias}</span> <button class="btn btn-glass btn-sm" onclick="openChangePassword()">${t('btn_change_pw')}</button> <button class="btn btn-glass btn-sm" onclick="logout()">${t('btn_logout')}</button>`;
+    mu.innerHTML = `<div class="mu-alias">Logged in as ${u.alias}</div><div class="mu-actions"><button onclick="openChangePassword()">${t('btn_change_pw')}</button><button onclick="logout()">${t('btn_logout')}</button></div>`;
+  } else {
+    nav.innerHTML = `<button class="btn btn-glass btn-sm" onclick="openLogin()">${t('nav_login')}</button> <button class="btn btn-glow btn-sm" onclick="openRegister()">${t('nav_register')}</button>`;
+    mu.innerHTML = `<div class="mu-actions"><button onclick="openLogin()">${t('nav_login')}</button><button onclick="openRegister()">${t('nav_register')}</button></div>`;
+  }
 }
 
 // api
