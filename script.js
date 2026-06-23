@@ -526,3 +526,16 @@ startCountdown(); startChampionCountdown(); populateTeams(); setLang(lang); upda
     });
   });
 })();
+
+// hide nav on scroll down, show on scroll up (mobile only)
+(function() {
+  var lastY = 0;
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function() {
+    if (window.innerWidth > 900) { nav.classList.remove('nav-hidden'); return; }
+    var y = window.scrollY;
+    if (y > lastY && y > 60) nav.classList.add('nav-hidden');
+    else nav.classList.remove('nav-hidden');
+    lastY = y;
+  });
+})();

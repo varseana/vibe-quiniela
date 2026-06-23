@@ -36,6 +36,7 @@
 }
 
 html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+@media (max-width: 900px) { html { scroll-snap-type: none; } }
 body { scroll-snap-type: none; }
 body {
   font-family: var(--font-body); background: var(--bg); color: var(--text-primary);
@@ -79,9 +80,10 @@ body {
 .nav {
   position: sticky; top: 0; z-index: 100;
   background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--divider); transition: box-shadow var(--speed) var(--ease);
+  border-bottom: 1px solid var(--divider); transition: box-shadow var(--speed) var(--ease), transform 0.3s var(--ease);
 }
 .nav.scrolled { box-shadow: var(--shadow-md); }
+.nav.nav-hidden { transform: translateY(-100%); }
 .nav-inner { max-width: 1120px; margin: 0 auto; padding: var(--sp-3) var(--sp-6); display: flex; align-items: center; justify-content: space-between; }
 .nav-brand { display: flex; align-items: center; }
 .nav-logo-img { height: 32px; width: auto; }
