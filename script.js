@@ -686,53 +686,53 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
 });
 
 // ⁘[ BRACKET DRAG TO PAN ]⁘
+// solo horizontal ~ el usuario arrastra izquierda/derecha en el bracket
+// arriba/abajo siempre scrollea la pagina (para llegar al leaderboard)
 (function() {
   var el = document.querySelector('.bracket-scroll');
   if (!el) return;
-  var startX, startY, scrollLeft, scrollTop, active;
+  var startX, scrollLeft, active;
   var THRESHOLD = 8;
 
-  // mouse drag
+  // mouse drag (horizontal only)
   el.addEventListener('mousedown', function(e) {
-    startX = e.clientX; startY = e.clientY;
-    scrollLeft = el.scrollLeft; scrollTop = el.scrollTop;
+    startX = e.clientX; scrollLeft = el.scrollLeft;
     active = false; el.style.cursor = 'grabbing';
   });
   window.addEventListener('mousemove', function(e) {
     if (startX == null) return;
-    var dx = e.clientX - startX, dy = e.clientY - startY;
-    if (!active && Math.hypot(dx, dy) < THRESHOLD) return;
+    var dx = e.clientX - startX;
+    if (!active && Math.abs(dx) < THRESHOLD) return;
     active = true;
     el.scrollLeft = scrollLeft - dx;
-    el.scrollTop = scrollTop - dy;
     e.preventDefault();
   });
   window.addEventListener('mouseup', function() { startX = null; active = false; el.style.cursor = 'grab'; });
 
-  // touch drag
+  // touch drag (horizontal only, vertical falls through to page)
   el.addEventListener('touchstart', function(e) {
-    startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-    scrollLeft = el.scrollLeft; scrollTop = el.scrollTop;
+    startX = e.touches[0].clientX; scrollLeft = el.scrollLeft;
     active = false;
   }, { passive: true });
 
   el.addEventListener('touchmove', function(e) {
     if (startX == null) return;
     var dx = e.touches[0].clientX - startX;
-    var dy = e.touches[0].clientY - startY;
-    if (!active && Math.hypot(dx, dy) < THRESHOLD) return;
+    var dy = e.touches[0].clientY - (e.touches[0].clientY); // not used
+    if (!active && Math.abs(dx) < THRESHOLD) return;
+    // solo activar pan horizontal si el movimiento es mas horizontal que vertical
+    var touchDy = e.touches[0].clientY - (el._touchStartY || e.touches[0].clientY);
+    if (Math.abs(touchDy) > Math.abs(dx) * 1.5) return; // gesto vertical → pagina
     active = true;
-
-    // si esta al fondo del bracket y sigue bajando, deja que la pagina scrollee
-    var atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
-    if (atBottom && dy > 0) return;
-
     e.preventDefault();
     el.scrollLeft = scrollLeft - dx;
-    el.scrollTop = scrollTop - dy;
   }, { passive: false });
 
-  el.addEventListener('touchend', function() { active = false; });
+  el.addEventListener('touchstart', function(e) {
+    el._touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  el.addEventListener('touchend', function() { active = false; el._touchStartY = null; });
 })();
 (function() {
   var bracketView = document.getElementById('knockoutBracketView');
