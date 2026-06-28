@@ -366,9 +366,8 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
   content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(155,48,255,0.5), transparent); z-index: 3;
 }
-/* fondo en el bracket completo para que el drag no muestre vacio */
+/* fondo en el knockout section */
 #knockout { background: var(--bg-secondary); }
-.bracket { background: var(--bg-secondary); padding: 16px 60px; }
 .knockout-content { padding: 40px 0; display: flex; flex-direction: column; align-items: center; width: 100%; }
 #knockoutBracketView { width: 100%; }
 #groupStageView { width: 100%; box-sizing: border-box; }
@@ -377,10 +376,10 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 @keyframes rotatePhone { 0%,100% { transform: rotate(0deg); } 30%,70% { transform: rotate(-90deg); } }
 
 /* bracket grid */
-.bracket-scroll { overflow-x: auto; overflow-y: hidden; padding: 16px 24px; display: flex; justify-content: safe center; width: 100%; align-items: stretch; user-select: none; -webkit-user-select: none; cursor: grab; }
+.bracket-scroll { overflow-x: auto; overflow-y: hidden; padding: 16px 0; width: 100%; user-select: none; -webkit-user-select: none; cursor: grab; box-sizing: border-box; }
 .bracket-scroll::-webkit-scrollbar { height: 5px; }
 .bracket-scroll::-webkit-scrollbar-thumb { background: rgba(155,48,255,0.3); border-radius: 3px; }
-.bracket { display: flex; align-items: stretch; justify-content: center; gap: 0; min-width: max-content; }
+.bracket { display: inline-flex; align-items: stretch; gap: 0; min-width: max-content; padding: 0 40px; }
 .ko-round { display: flex; flex-direction: column; min-width: 155px; }
 .ko-round-header { text-align: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); padding: 6px; margin: 0 4px 8px; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: var(--font-display); }
 .ko-round-matches { display: flex; flex-direction: column; justify-content: space-around; flex: 1; gap: 8px; padding: 0 4px; }
@@ -391,7 +390,6 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
   .ko-round-header { font-size: 7px; letter-spacing: 0.8px; }
   .partido-team { font-size: 10px; }
   .partido-score { font-size: 16px; }
-  .bracket-scroll { padding: 8px 12px; }
 }
 .ko-round-matches .partido-card { cursor: pointer; min-width: 200px; }
 .btn-back-stage {
