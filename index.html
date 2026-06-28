@@ -14,6 +14,34 @@
 <div class="blob blob-2"></div>
 <div class="blob blob-3"></div>
 
+<!-- electric border SVG filter for prize cards -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <filter id="turbulent-displace" colorInterpolationFilters="sRGB" x="-40%" y="-40%" width="180%" height="180%">
+      <feTurbulence type="turbulence" baseFrequency="0.025" numOctaves="8" result="noise1" seed="1"/>
+      <feOffset in="noise1" result="offsetNoise1">
+        <animate attributeName="dy" values="600;-150;450;-600;250;600" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.2;0.4;0.6;0.8;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+      </feOffset>
+      <feTurbulence type="turbulence" baseFrequency="0.025" numOctaves="8" result="noise2" seed="1"/>
+      <feOffset in="noise2" result="offsetNoise2">
+        <animate attributeName="dy" values="0;-500;350;-80;-600;0" dur="11s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25;0.5;0.65;0.85;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+      </feOffset>
+      <feTurbulence type="turbulence" baseFrequency="0.025" numOctaves="8" result="noise3" seed="2"/>
+      <feOffset in="noise3" result="offsetNoise3">
+        <animate attributeName="dx" values="400;-250;180;-400;300;400" dur="9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.2;0.45;0.65;0.8;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+      </feOffset>
+      <feTurbulence type="turbulence" baseFrequency="0.025" numOctaves="8" result="noise4" seed="2"/>
+      <feOffset in="noise4" result="offsetNoise4">
+        <animate attributeName="dx" values="0;350;-200;400;-120;0" dur="13s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.2;0.4;0.6;0.8;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+      </feOffset>
+      <feComposite in="offsetNoise1" in2="offsetNoise2" result="part1"/>
+      <feComposite in="offsetNoise3" in2="offsetNoise4" result="part2"/>
+      <feBlend in="part1" in2="part2" mode="color-dodge" result="combinedNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="8" xChannelSelector="R" yChannelSelector="B"/>
+    </filter>
+  </defs>
+</svg>
+
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -50,12 +78,6 @@
     <img src="vibe-logo.png" alt="VIBE" class="hero-logo">
     <h1 class="hero-title"><span class="gradient-text" data-i18n="hero_title">World Cup Predictions 2026</span></h1>
     <p class="hero-subtitle" data-i18n="hero_sub">Predict the results of the FIFA World Cup USA/Mexico/Canada. Compete with all of TSE. Win prizes.</p>
-    <div class="countdown" id="countdown">
-      <div class="countdown-item"><span class="countdown-num" id="cdDays">--</span><span class="countdown-label" data-i18n="days">Days</span></div>
-      <div class="countdown-item"><span class="countdown-num" id="cdHours">--</span><span class="countdown-label" data-i18n="hours">Hours</span></div>
-      <div class="countdown-item"><span class="countdown-num" id="cdMins">--</span><span class="countdown-label">Min</span></div>
-      <div class="countdown-item"><span class="countdown-num" id="cdSecs">--</span><span class="countdown-label">Sec</span></div>
-    </div>
     <div class="hero-actions">
       <button class="btn btn-glow" id="btnRegister" data-i18n="hero_join">Join the Pool</button>
       <a href="#reglas" class="btn btn-glass" data-i18n="hero_rules">View Rules</a>
@@ -63,10 +85,66 @@
     <div class="prizes">
       <div class="prizes-title" data-i18n="prizes_title">Prizes</div>
       <div class="prizes-grid">
-        <div class="prize-card prize-card--1st"><span class="prize-icon">&#127942;</span><div class="prize-rank" data-i18n="prize_1st">1st Place</div><div class="prize-amount">&#8353;50,000</div><div class="prize-currency">colones</div></div>
-        <div class="prize-card prize-card--2nd"><span class="prize-icon">&#129352;</span><div class="prize-rank" data-i18n="prize_2nd">2nd Place</div><div class="prize-amount">&#8353;35,000</div><div class="prize-currency">colones</div></div>
-        <div class="prize-card prize-card--3rd"><span class="prize-icon">&#129353;</span><div class="prize-rank" data-i18n="prize_3rd">3rd Place</div><div class="prize-amount">&#8353;25,000</div><div class="prize-currency">colones</div></div>
-        <div class="prize-card prize-card--raffle"><span class="prize-icon">&#127922;</span><div class="prize-rank" data-i18n="prize_raffle">Raffle</div><div class="prize-amount">&#8353;20,000</div><div class="prize-currency" data-i18n="prize_raffle_desc">all participants</div></div>
+        <div class="prize-card prize-card--1st">
+          <div class="prize-inner">
+            <div class="prize-border-outer"><div class="prize-border"></div></div>
+            <div class="glow-1"></div><div class="glow-2"></div>
+          </div>
+          <div class="overlay-1"></div><div class="overlay-2"></div>
+          <div class="bg-glow"></div>
+          <div class="prize-content">
+            <div class="prize-rank-badge" data-i18n="prize_1st">1st Place</div>
+            <span class="prize-icon">&#127942;</span>
+            <div><div class="prize-amount-val">&#8353;50,000</div><div class="prize-currency">colones</div></div>
+            <div class="prize-divider"></div>
+            <div class="prize-label">Top of the Leaderboard</div>
+          </div>
+        </div>
+        <div class="prize-card prize-card--2nd">
+          <div class="prize-inner">
+            <div class="prize-border-outer"><div class="prize-border"></div></div>
+            <div class="glow-1"></div><div class="glow-2"></div>
+          </div>
+          <div class="overlay-1"></div><div class="overlay-2"></div>
+          <div class="bg-glow"></div>
+          <div class="prize-content">
+            <div class="prize-rank-badge" data-i18n="prize_2nd">2nd Place</div>
+            <span class="prize-icon">&#129352;</span>
+            <div><div class="prize-amount-val">&#8353;35,000</div><div class="prize-currency">colones</div></div>
+            <div class="prize-divider"></div>
+            <div class="prize-label">Runner Up</div>
+          </div>
+        </div>
+        <div class="prize-card prize-card--3rd">
+          <div class="prize-inner">
+            <div class="prize-border-outer"><div class="prize-border"></div></div>
+            <div class="glow-1"></div><div class="glow-2"></div>
+          </div>
+          <div class="overlay-1"></div><div class="overlay-2"></div>
+          <div class="bg-glow"></div>
+          <div class="prize-content">
+            <div class="prize-rank-badge" data-i18n="prize_3rd">3rd Place</div>
+            <span class="prize-icon">&#129353;</span>
+            <div><div class="prize-amount-val">&#8353;25,000</div><div class="prize-currency">colones</div></div>
+            <div class="prize-divider"></div>
+            <div class="prize-label">Third on the Board</div>
+          </div>
+        </div>
+        <div class="prize-card prize-card--raffle">
+          <div class="prize-inner">
+            <div class="prize-border-outer"><div class="prize-border"></div></div>
+            <div class="glow-1"></div><div class="glow-2"></div>
+          </div>
+          <div class="overlay-1"></div><div class="overlay-2"></div>
+          <div class="bg-glow"></div>
+          <div class="prize-content">
+            <div class="prize-rank-badge" data-i18n="prize_raffle">Raffle</div>
+            <span class="prize-icon">&#127922;</span>
+            <div><div class="prize-amount-val">&#8353;20,000</div><div class="prize-currency" data-i18n="prize_raffle_desc">all participants</div></div>
+            <div class="prize-divider"></div>
+            <div class="prize-label">Everyone Eligible</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

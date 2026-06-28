@@ -477,7 +477,7 @@ backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 's
 setInterval(() => { if (allPartidos.length) renderPartidos(getFilteredPartidos()); }, 60000);
 
 // init
-startCountdown(); startChampionCountdown(); populateTeams(); setLang(lang); updateUserUI(); updateChampionUI(); loadPartidos(); loadLeaderboard(); loadKnockout();
+startChampionCountdown(); populateTeams(); setLang(lang); updateUserUI(); updateChampionUI(); loadPartidos(); loadLeaderboard(); loadKnockout();
 
 // ⁘[ KNOCKOUT BRACKET ]⁘
 // lee getPartidos y filtra por fase para construir el bracket dinamicamente

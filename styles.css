@@ -112,11 +112,7 @@ body {
 .hero-subtitle { font-size: 17px; color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--sp-8); }
 .hero-actions { display: flex; gap: var(--sp-4); justify-content: center; flex-wrap: wrap; }
 
-/* countdown */
-.countdown { display: flex; gap: var(--sp-5); justify-content: center; margin-bottom: var(--sp-8); }
-.countdown-item { text-align: center; }
-.countdown-num { display: block; font-family: var(--font-display); font-size: 42px; font-weight: 800; background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.countdown-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+/* countdown removed — tournament started Jun 11 */
 
 /* sections */
 .section { padding: var(--sp-10) 0; position: relative; z-index: 1; scroll-snap-align: start; }
@@ -250,34 +246,29 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .prizes-title { font-family: var(--font-display); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted); margin-bottom: 20px; }
 .prizes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; animation: crtTurnOn 0.8s ease-out 0.3s both; }
 @keyframes crtTurnOn { 0% { transform: scaleY(0); opacity: 0; } 30% { transform: scaleY(0.008); opacity: 1; filter: brightness(8); } 100% { transform: scaleY(1); opacity: 1; filter: brightness(1); } }
-.prize-card { background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 24px 16px; text-align: center; position: relative; overflow: hidden; transition: transform var(--speed) var(--ease), box-shadow var(--speed) var(--ease), border-color var(--speed) var(--ease); }
+
+/* electric border prize cards */
+.prize-card { padding: 3px; border-radius: var(--radius-md); position: relative; background: linear-gradient(-30deg, var(--c-faint), transparent, var(--c-faint)), linear-gradient(to bottom, oklch(0.13 0 0), oklch(0.13 0 0)); transition: transform var(--speed) var(--ease); }
 .prize-card:hover { transform: translateY(-4px); }
-.prize-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 16px 16px 0 0; }
-.prize-card--1st { border-color: rgba(255,215,0,0.3); animation: goldPulse 3s ease-in-out infinite; }
-.prize-card--1st:hover { box-shadow: 0 8px 40px rgba(255,215,0,0.15), 0 0 30px rgba(255,215,0,0.1); border-color: rgba(255,215,0,0.5); }
-.prize-card--1st::before { background: linear-gradient(90deg, #ffd700, #ffed4a, #ffd700); }
-.prize-card--1st .prize-icon { background: linear-gradient(135deg, #ffd700, #ffed4a); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.prize-card--1st .prize-amount { color: #ffd700; }
-.prize-card--2nd { border-color: rgba(192,192,220,0.3); }
-.prize-card--2nd:hover { box-shadow: 0 8px 40px rgba(192,192,220,0.12), 0 0 30px rgba(192,192,220,0.08); border-color: rgba(192,192,220,0.5); }
-.prize-card--2nd::before { background: linear-gradient(90deg, #c0c0dc, #e8e8f0, #c0c0dc); }
-.prize-card--2nd .prize-icon { background: linear-gradient(135deg, #c0c0dc, #e8e8f0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.prize-card--2nd .prize-amount { color: #c0c0dc; }
-.prize-card--3rd { border-color: rgba(205,127,50,0.3); }
-.prize-card--3rd:hover { box-shadow: 0 8px 40px rgba(205,127,50,0.12), 0 0 30px rgba(205,127,50,0.08); border-color: rgba(205,127,50,0.5); }
-.prize-card--3rd::before { background: linear-gradient(90deg, #cd7f32, #daa06d, #cd7f32); }
-.prize-card--3rd .prize-icon { background: linear-gradient(135deg, #cd7f32, #daa06d); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.prize-card--3rd .prize-amount { color: #cd7f32; }
-.prize-card--raffle { border-color: rgba(155,48,255,0.3); }
-.prize-card--raffle:hover { box-shadow: 0 8px 40px rgba(155,48,255,0.15), var(--shadow-glow); border-color: rgba(155,48,255,0.5); }
-.prize-card--raffle::before { background: linear-gradient(90deg, var(--vibe-purple), var(--vibe-magenta), var(--vibe-purple)); }
-.prize-card--raffle .prize-icon { background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.prize-card--raffle .prize-amount { color: var(--vibe-purple); }
-.prize-icon { font-size: 32px; margin-bottom: 8px; display: block; }
-.prize-rank { font-family: var(--font-display); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 6px; }
-.prize-amount { font-family: var(--font-display); font-size: 22px; font-weight: 800; margin-bottom: 4px; }
-.prize-currency { font-size: 11px; color: var(--text-muted); font-weight: 500; }
-@keyframes goldPulse { 0%,100% { box-shadow: 0 4px 20px rgba(255,215,0,0.08); } 50% { box-shadow: 0 4px 28px rgba(255,215,0,0.2), 0 0 40px rgba(255,215,0,0.08); } }
+.prize-inner { position: relative; border-radius: calc(var(--radius-md) - 2px); overflow: visible; }
+.prize-border { width: calc(100% + 6px); height: 226px; border-radius: calc(var(--radius-md) - 5px); border: 2px solid var(--c); margin-top: -3px; margin-left: -4.5px; filter: url(#turbulent-displace); }
+.prize-border-outer { border: 2px solid var(--c-mid); border-radius: calc(var(--radius-md) - 1px); padding-right: 2px; padding-bottom: 2px; }
+.glow-1 { border: 2px solid var(--c-mid); border-radius: calc(var(--radius-md) - 2px); position: absolute; inset: 0; filter: blur(1px); }
+.glow-2 { border: 2px solid var(--c); border-radius: calc(var(--radius-md) - 2px); position: absolute; inset: 0; filter: blur(4px); }
+.overlay-1 { position: absolute; inset: 0; border-radius: var(--radius-md); opacity: .25; mix-blend-mode: overlay; transform: scale(1.1); filter: blur(16px); background: linear-gradient(-30deg, white, transparent 30%, transparent 70%, white); }
+.overlay-2 { position: absolute; inset: 0; border-radius: var(--radius-md); opacity: .125; mix-blend-mode: overlay; transform: scale(1.1); filter: blur(16px); background: linear-gradient(-30deg, white, transparent 30%, transparent 70%, white); }
+.bg-glow { position: absolute; inset: 0; border-radius: var(--radius-md); filter: blur(32px); transform: scale(1.1); opacity: .075; z-index: -1; background: linear-gradient(-30deg, var(--c), transparent, var(--c)); }
+.prize-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 18px 12px 16px; text-align: center; }
+.prize-rank-badge { background: var(--c-faint); border: 1px solid var(--c-mid); border-radius: 50px; padding: 4px 12px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--c); }
+.prize-icon { font-size: 34px; line-height: 1; filter: drop-shadow(0 0 10px var(--c)); display: block; }
+.prize-amount-val { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--c); text-shadow: 0 0 20px var(--c-mid); letter-spacing: -0.5px; }
+.prize-currency { font-size: 8px; font-weight: 600; color: var(--c-mid); text-transform: uppercase; letter-spacing: 1.5px; margin-top: -3px; }
+.prize-divider { width: 100%; height: 1px; opacity: .2; background: linear-gradient(to right, transparent, var(--c), transparent); }
+.prize-label { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: .5px; }
+.prize-card--1st { --c: #ffd700; --c-mid: rgba(255,215,0,.5); --c-faint: rgba(255,215,0,.08); }
+.prize-card--2nd { --c: #c0c0dc; --c-mid: rgba(192,192,220,.5); --c-faint: rgba(192,192,220,.08); }
+.prize-card--3rd { --c: #cd7f32; --c-mid: rgba(205,127,50,.5); --c-faint: rgba(205,127,50,.08); }
+.prize-card--raffle { --c: #9b30ff; --c-mid: rgba(155,48,255,.5); --c-faint: rgba(155,48,255,.08); }
 
 /* footer */
 .footer { border-top: 1px solid var(--divider); padding: var(--sp-7) 0; position: relative; z-index: 1; scroll-snap-align: none; }
