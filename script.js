@@ -562,7 +562,7 @@ function renderKnockout(partidos) {
     var count = Math.max(roundMatches.length, round.slots);
     for (var i = 0; i < count; i++) {
       var p = roundMatches[i] || null;
-      var card = buildKoCard(p);
+      var card = buildKoCard(p, round.label);
       matchContainer.appendChild(card);
     }
 
@@ -571,13 +571,46 @@ function renderKnockout(partidos) {
   });
 }
 
-function buildKoCard(p) {
-  var hasTeams = p && p.local && p.visitante;
+function buildKoCard(p, roundLabel) {
+  // 4 estados:
+  // 1. sin datos (p null o ambos equipos vacios) → "Coming Soon" minimal
+  // 2. parcial (solo local o solo visitante) → equipo + TBD, no clickeable
+  // 3. ambos equipos, abierto → full card clickeable
+  // 4. finalizado → resultado + puntos
+
+  var hasLocal = p && p.local && p.local.trim();
+  var hasVisitante = p && p.visitante && p.visitante.trim();
+  var hasTeams = hasLocal && hasVisitante;
+  var hasPartial = hasLocal || hasVisitante;
   var isFinished = p && p.status === 'finalizado';
+  var fase = roundLabel || (p ? p.fase : 'Round of 32');
+
+  var card = document.createElement('div');
+
+  // estado 1: sin datos ~ coming soon
+  if (!hasPartial) {
+    card.className = 'glass-card partido-card partido-card--locked ko-coming-soon';
+    card.innerHTML = '<div class="partido-header"><span class="partido-fase">' + esc(fase) + '</span></div>' +
+      '<div class="ko-coming-label">Coming Soon</div>';
+    return card;
+  }
+
+  // estado 2: parcial ~ un equipo clasificado, el otro TBD
+  if (!hasTeams && !isFinished) {
+    card.className = 'glass-card partido-card partido-card--locked';
+    var teamA = hasLocal ? esc(p.local) : 'TBD';
+    var teamB = hasVisitante ? esc(p.visitante) : 'TBD';
+    card.innerHTML = '<div class="partido-header"><span class="partido-fase">' + esc(fase) + '</span></div>' +
+      '<div class="partido-teams"><div class="partido-team">' + teamA + '</div><div class="partido-vs">vs</div><div class="partido-team">' + teamB + '</div></div>' +
+      (p.fecha ? '<div class="partido-date">' + formatFecha(p.fecha) + ' - ' + formatHora(p.hora) + '</div>' : '') +
+      '<div class="partido-bet partido-bet--waiting">Waiting for teams</div>';
+    return card;
+  }
+
+  // estados 3 y 4: ambos equipos presentes
   var pred = p && koPredictions[p.partido_id];
   var pts = null;
 
-  // calcular puntos
   if (isFinished && pred && p.gol_local !== '' && p.gol_visitante !== '') {
     var rL = Number(p.gol_local), rV = Number(p.gol_visitante);
     var pL = Number(pred.gol_local), pV = Number(pred.gol_visitante);
@@ -608,34 +641,25 @@ function buildKoCard(p) {
   var isClickable = bettingState === 'open' || bettingState === 'closing';
   var isClosed = isFinished || bettingState === 'closed' || bettingState === 'locked';
 
-  var card = document.createElement('div');
   card.className = 'glass-card partido-card' + (isClosed ? ' partido-card--locked' : '');
 
-  // header: fase + status badge
   var statusBadge = '';
   if (isFinished) statusBadge = '<span class="partido-status finalizado">Final</span>';
-  else if (hasTeams) statusBadge = '<span class="partido-status pendiente">Score Pending</span>';
+  else statusBadge = '<span class="partido-status pendiente">Score Pending</span>';
 
-  // teams row
-  var fase = p ? esc(p.fase || '') : 'Round of 32';
-  var teamA = hasTeams ? esc(p.local) : 'TBD';
-  var teamB = hasTeams ? esc(p.visitante) : 'TBD';
   var teamsRow = '<div class="partido-teams">' +
-    '<div class="partido-team">' + teamA + '</div>' +
+    '<div class="partido-team">' + esc(p.local) + '</div>' +
     (isFinished ? '<div class="partido-score">' + p.gol_local + ' - ' + p.gol_visitante + '</div>' : '<div class="partido-vs">vs</div>') +
-    '<div class="partido-team">' + teamB + '</div>' +
+    '<div class="partido-team">' + esc(p.visitante) + '</div>' +
     '</div>';
 
-  // date row
-  var dateStr = p ? formatFecha(p.fecha) + ' - ' + formatHora(p.hora) : '';
+  var dateStr = formatFecha(p.fecha) + ' - ' + formatHora(p.hora);
 
-  // betting status line
   var betLine = '';
   if (bettingState === 'open') betLine = '<div class="partido-bet partido-bet--open">Open</div>';
   else if (bettingState === 'closing') betLine = '<div class="partido-bet partido-bet--closing">Closes in ' + closingLabel + '</div>';
   else if (bettingState === 'closed') betLine = '<div class="partido-bet partido-bet--closed">Betting Closed</div>';
 
-  // prediction line
   var predLine = '';
   if (pred) {
     predLine = '<div class="partido-prediction">Your prediction: ' + pred.gol_local + ' - ' + pred.gol_visitante;
@@ -644,7 +668,7 @@ function buildKoCard(p) {
   }
 
   card.innerHTML =
-    '<div class="partido-header"><span class="partido-fase">' + fase + '</span>' + statusBadge + '</div>' +
+    '<div class="partido-header"><span class="partido-fase">' + esc(fase) + '</span>' + statusBadge + '</div>' +
     teamsRow +
     (dateStr ? '<div class="partido-date">' + dateStr + '</div>' : '') +
     betLine +
