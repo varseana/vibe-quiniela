@@ -685,7 +685,41 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
   } catch { msg.textContent = t('conn_err'); msg.className = 'form-msg error'; }
 });
 
-// ⁘[ GROUP STAGE TOGGLE ]⁘
+// ⁘[ BRACKET DRAG TO PAN ]⁘
+(function() {
+  var el = document.querySelector('.bracket-scroll');
+  if (!el) return;
+  var isDown = false, startX, startY, scrollLeft, scrollTop;
+
+  // mouse drag
+  el.addEventListener('mousedown', function(e) {
+    isDown = true; el.style.cursor = 'grabbing';
+    startX = e.pageX - el.offsetLeft; startY = e.pageY - el.offsetTop;
+    scrollLeft = el.scrollLeft; scrollTop = el.scrollTop;
+  });
+  el.addEventListener('mouseleave', function() { isDown = false; el.style.cursor = 'grab'; });
+  el.addEventListener('mouseup', function() { isDown = false; el.style.cursor = 'grab'; });
+  el.addEventListener('mousemove', function(e) {
+    if (!isDown) return;
+    e.preventDefault();
+    el.scrollLeft = scrollLeft - (e.pageX - el.offsetLeft - startX);
+    el.scrollTop = scrollTop - (e.pageY - el.offsetTop - startY);
+  });
+  el.style.cursor = 'grab';
+
+  // touch drag (mobile)
+  var touchStartX, touchStartY, touchScrollLeft, touchScrollTop;
+  el.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY;
+    touchScrollLeft = el.scrollLeft; touchScrollTop = el.scrollTop;
+  }, { passive: true });
+  el.addEventListener('touchmove', function(e) {
+    var dx = touchStartX - e.touches[0].clientX;
+    var dy = touchStartY - e.touches[0].clientY;
+    el.scrollLeft = touchScrollLeft + dx;
+    el.scrollTop = touchScrollTop + dy;
+  }, { passive: true });
+})();
 (function() {
   var btn = document.getElementById('btnToggleGroupStage');
   var bracketView = document.getElementById('knockoutBracketView');
