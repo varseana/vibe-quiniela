@@ -686,49 +686,58 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
 });
 
 // ⁘[ BRACKET DRAG TO PAN ]⁘
-// el usuario quiere arrastrar el bracket como un whiteboard ~ touch-action:none le dice al browser
-// que no scrollee la pagina cuando el dedo esta sobre el bracket
 (function() {
   var el = document.querySelector('.bracket-scroll');
   if (!el) return;
 
-  var isDragging = false, startX, startY, scrollLeft, scrollTop, moved;
-  var THRESHOLD = 5; // pixels before activating drag (allows taps/clicks)
+  var startX, startY, scrollLeft, scrollTop, moved;
+  var THRESHOLD = 5;
 
-  // mouse
   el.addEventListener('mousedown', function(e) {
     startX = e.clientX; startY = e.clientY;
     scrollLeft = el.scrollLeft; scrollTop = el.scrollTop;
-    isDragging = false; moved = false;
+    moved = false; el.style.cursor = 'grabbing';
   });
   window.addEventListener('mousemove', function(e) {
     if (startX == null) return;
     var dx = e.clientX - startX, dy = e.clientY - startY;
     if (!moved && Math.abs(dx) + Math.abs(dy) < THRESHOLD) return;
-    moved = true; isDragging = true;
-    el.style.cursor = 'grabbing';
+    moved = true;
     el.scrollLeft = scrollLeft - dx;
     el.scrollTop = scrollTop - dy;
   });
-  window.addEventListener('mouseup', function() {
-    startX = null; isDragging = false; el.style.cursor = 'grab';
-  });
+  window.addEventListener('mouseup', function() { startX = null; el.style.cursor = 'grab'; });
 
-  // touch ~ touch-action:none on the element (set via CSS) prevents page scroll
+  // touch ~ solo previene el scroll de pagina si el bracket tiene recorrido en esa direccion
+  // si ya llego al limite vertical, deja que la pagina scrollee normalmente (scroll chaining)
   el.addEventListener('touchstart', function(e) {
     startX = e.touches[0].clientX; startY = e.touches[0].clientY;
     scrollLeft = el.scrollLeft; scrollTop = el.scrollTop;
     moved = false;
   }, { passive: true });
+
   el.addEventListener('touchmove', function(e) {
     var dx = e.touches[0].clientX - startX;
     var dy = e.touches[0].clientY - startY;
     if (!moved && Math.abs(dx) + Math.abs(dy) < THRESHOLD) return;
     moved = true;
-    e.preventDefault(); // ok because touch-action:none makes this non-passive
-    el.scrollLeft = scrollLeft - dx;
-    el.scrollTop = scrollTop - dy;
-  }, { passive: false }); // passive:false required to call preventDefault
+
+    var atTop = el.scrollTop === 0;
+    var atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+    var atLeft = el.scrollLeft === 0;
+    var atRight = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+
+    // si hay recorrido disponible en el bracket, pan el bracket y bloquea pagina
+    var canScrollX = (!atLeft && dx > 0) || (!atRight && dx < 0);
+    var canScrollY = (!atTop && dy > 0) || (!atBottom && dy < 0);
+
+    if (canScrollX || canScrollY) {
+      e.preventDefault();
+      el.scrollLeft = scrollLeft - dx;
+      el.scrollTop = scrollTop - dy;
+    }
+    // si no hay recorrido (ej: ya esta al fondo), no previene — pagina scrollea normal
+  }, { passive: false });
 })();
 (function() {
   var bracketView = document.getElementById('knockoutBracketView');
