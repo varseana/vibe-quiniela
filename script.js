@@ -686,39 +686,49 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
 });
 
 // ⁘[ BRACKET DRAG TO PAN ]⁘
+// el usuario quiere arrastrar el bracket como un whiteboard ~ touch-action:none le dice al browser
+// que no scrollee la pagina cuando el dedo esta sobre el bracket
 (function() {
   var el = document.querySelector('.bracket-scroll');
   if (!el) return;
-  var isDown = false, startX, startY, scrollLeft, scrollTop;
 
-  // mouse drag
+  var isDragging = false, startX, startY, scrollLeft, scrollTop, moved;
+  var THRESHOLD = 5; // pixels before activating drag (allows taps/clicks)
+
+  // mouse
   el.addEventListener('mousedown', function(e) {
-    isDown = true; el.style.cursor = 'grabbing';
-    startX = e.pageX - el.offsetLeft; startY = e.pageY - el.offsetTop;
+    startX = e.clientX; startY = e.clientY;
     scrollLeft = el.scrollLeft; scrollTop = el.scrollTop;
+    isDragging = false; moved = false;
   });
-  el.addEventListener('mouseleave', function() { isDown = false; el.style.cursor = 'grab'; });
-  el.addEventListener('mouseup', function() { isDown = false; el.style.cursor = 'grab'; });
-  el.addEventListener('mousemove', function(e) {
-    if (!isDown) return;
-    e.preventDefault();
-    el.scrollLeft = scrollLeft - (e.pageX - el.offsetLeft - startX);
-    el.scrollTop = scrollTop - (e.pageY - el.offsetTop - startY);
+  window.addEventListener('mousemove', function(e) {
+    if (startX == null) return;
+    var dx = e.clientX - startX, dy = e.clientY - startY;
+    if (!moved && Math.abs(dx) + Math.abs(dy) < THRESHOLD) return;
+    moved = true; isDragging = true;
+    el.style.cursor = 'grabbing';
+    el.scrollLeft = scrollLeft - dx;
+    el.scrollTop = scrollTop - dy;
   });
-  el.style.cursor = 'grab';
+  window.addEventListener('mouseup', function() {
+    startX = null; isDragging = false; el.style.cursor = 'grab';
+  });
 
-  // touch drag (mobile)
-  var touchStartX, touchStartY, touchScrollLeft, touchScrollTop;
+  // touch ~ touch-action:none on the element (set via CSS) prevents page scroll
   el.addEventListener('touchstart', function(e) {
-    touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY;
-    touchScrollLeft = el.scrollLeft; touchScrollTop = el.scrollTop;
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+    scrollLeft = el.scrollLeft; scrollTop = el.scrollTop;
+    moved = false;
   }, { passive: true });
   el.addEventListener('touchmove', function(e) {
-    var dx = touchStartX - e.touches[0].clientX;
-    var dy = touchStartY - e.touches[0].clientY;
-    el.scrollLeft = touchScrollLeft + dx;
-    el.scrollTop = touchScrollTop + dy;
-  }, { passive: true });
+    var dx = e.touches[0].clientX - startX;
+    var dy = e.touches[0].clientY - startY;
+    if (!moved && Math.abs(dx) + Math.abs(dy) < THRESHOLD) return;
+    moved = true;
+    e.preventDefault(); // ok because touch-action:none makes this non-passive
+    el.scrollLeft = scrollLeft - dx;
+    el.scrollTop = scrollTop - dy;
+  }, { passive: false }); // passive:false required to call preventDefault
 })();
 (function() {
   var bracketView = document.getElementById('knockoutBracketView');
