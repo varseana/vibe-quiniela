@@ -119,44 +119,87 @@
   </div>
 </section>
 
-<section class="section section-alt" id="partidos">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-badge" data-i18n="match_badge">Matches</span>
-      <h2 class="section-title"><span class="gradient-text" data-i18n="match_title">Group Stage</span></h2>
-    </div>
-    <div class="partidos-filters">
-      <button class="filter-btn active" data-filter="all" data-i18n="filter_all">All</button>
-      <button class="filter-btn" data-filter="pendiente" data-i18n="filter_pending">Pending</button>
-      <button class="filter-btn" data-filter="finalizado" data-i18n="filter_done">Finished</button>
-      <span class="filter-sep"></span>
-      <button class="sort-btn active" data-sort="date">By Date</button>
-      <button class="sort-btn" data-sort="group">By Group</button>
-    </div>
-    <div class="partidos-grid" id="partidosGrid">
-      <div class="glass-card partido-card placeholder-card"><p class="placeholder-text" data-i18n="loading">Loading...</p></div>
-    </div>
-  </div>
-</section>
-
 <section class="section section-alt" id="knockout">
   <div class="knockout-wrapper">
     <div class="knockout-content">
-      <div class="section-header" style="text-align:center;padding:20px 0 10px;width:100%">
+      <div class="section-header" style="text-align:center;padding:20px 0 10px;width:100%;position:relative">
         <span class="section-badge">Elimination</span>
         <h2 class="section-title"><span class="gradient-text">Knockout Bracket</span></h2>
+        <p class="section-desc" style="margin-top:8px">Click a match to predict. Rounds unlock progressively.</p>
+        <button class="btn-back-stage" id="btnToggleGroupStage">&#9654; Group Stage Predictions</button>
       </div>
+      <div id="knockoutBracketView">
       <div class="bracket-scroll">
         <div class="bracket" id="bracketGrid"></div>
       </div>
-    </div>
-    <div class="knockout-overlay">
-      <div class="ko-overlay-text">COMING SOON</div>
-      <p class="ko-overlay-sub">Predictions open once group stage is complete.</p>
-      <p class="ko-rotate-hint"><svg class="rotate-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M12 18h.01"/></svg><span>Rotate your device or view on PC for the best experience.</span></p>
+      <p class="ko-rotate-hint"><svg class="rotate-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M12 18h.01"/></svg><span>Rotate your device or view on PC for best experience.</span></p>
+      </div>
+      <div id="groupStageView" style="display:none;padding:0 24px 24px">
+        <div class="section-header" style="text-align:left;margin-bottom:16px">
+          <h3 style="font-family:var(--font-display);font-size:20px;font-weight:700">Group Stage Predictions</h3>
+        </div>
+        <div class="partidos-filters">
+          <button class="filter-btn active" data-filter="all" data-i18n="filter_all">All</button>
+          <button class="filter-btn" data-filter="pendiente" data-i18n="filter_pending">Pending</button>
+          <button class="filter-btn" data-filter="finalizado" data-i18n="filter_done">Finished</button>
+          <span class="filter-sep"></span>
+          <button class="sort-btn active" data-sort="date">By Date</button>
+          <button class="sort-btn" data-sort="group">By Group</button>
+        </div>
+        <div class="partidos-grid" id="partidosGrid">
+          <div class="glass-card partido-card placeholder-card"><p class="placeholder-text" data-i18n="loading">Loading...</p></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+<script>
+// inline bracket render ~ no depende de script.js para mostrar los cuadros
+(function() {
+  var ROUNDS = [
+    { id:'r32l', label:'Round of 32', slots:8 },
+    { id:'r16l', label:'Round of 16', slots:4 },
+    { id:'qfl',  label:'Quarter-Finals', slots:2 },
+    { id:'semil',label:'Semi-Finals', slots:1 },
+    { id:'finalm',label:'Final', slots:0, isFinal:true },
+    { id:'semir',label:'Semi-Finals', slots:1 },
+    { id:'qfr',  label:'Quarter-Finals', slots:2 },
+    { id:'r16r', label:'Round of 16', slots:4 },
+    { id:'r32r', label:'Round of 32', slots:8 }
+  ];
+  var grid = document.getElementById('bracketGrid');
+  if (!grid) return;
+  ROUNDS.forEach(function(r) {
+    var col = document.createElement('div');
+    col.className = 'ko-round' + (r.isFinal ? ' ko-final-col' : '');
+    var hdr = document.createElement('div');
+    hdr.className = 'ko-round-header'; hdr.textContent = r.label;
+    col.appendChild(hdr);
+    if (r.isFinal) {
+      var img = document.createElement('img');
+      img.src = 'trophy.png'; img.className = 'ko-trophy-inner'; img.alt = 'Trophy';
+      col.appendChild(img);
+      var lbl = document.createElement('div');
+      lbl.className = 'ko-final-label'; lbl.textContent = 'WORLD CHAMPIONS';
+      col.appendChild(lbl);
+    } else {
+      var matches = document.createElement('div');
+      matches.className = 'ko-round-matches';
+      for (var i = 0; i < r.slots; i++) {
+        var card = document.createElement('div');
+        card.className = 'ko-matchup locked';
+        card.id = 'ko-' + r.id + '-' + i;
+        card.innerHTML = '<div class="ko-matchup__teams"><div class="ko-matchup__team">TBD</div><span class="ko-matchup__vs">vs</span><div class="ko-matchup__team">TBD</div></div><div class="ko-matchup__info"></div><div class="ko-matchup__status coming">COMING SOON</div>';
+        matches.appendChild(card);
+      }
+      col.appendChild(matches);
+    }
+    grid.appendChild(col);
+  });
+  // expose so script.js can update cards with real data
+  window._koBracketReady = true;
+})();
+</script>
 
 <section class="section" id="leaderboard">
   <div class="container">
@@ -204,7 +247,7 @@
   </div>
 </div>
 
-<!-- SET PASSWORD MODAL (after admin reset) -->
+<!-- SET PASSWORD MODAL -->
 <div class="modal-overlay" id="setPasswordOverlay">
   <div class="glass-card modal">
     <div class="modal-header"><h3 class="gradient-text" data-i18n="set_pw_title">Set Your Password</h3><button class="modal-close" id="setPwClose">&times;</button></div>
