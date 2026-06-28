@@ -689,55 +689,50 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
 (function() {
   var el = document.querySelector('.bracket-scroll');
   if (!el) return;
+  var startX, startY, scrollLeft, scrollTop, active;
+  var THRESHOLD = 8;
 
-  var startX, startY, scrollLeft, scrollTop, moved;
-  var THRESHOLD = 5;
-
+  // mouse drag
   el.addEventListener('mousedown', function(e) {
     startX = e.clientX; startY = e.clientY;
     scrollLeft = el.scrollLeft; scrollTop = el.scrollTop;
-    moved = false; el.style.cursor = 'grabbing';
+    active = false; el.style.cursor = 'grabbing';
   });
   window.addEventListener('mousemove', function(e) {
     if (startX == null) return;
     var dx = e.clientX - startX, dy = e.clientY - startY;
-    if (!moved && Math.abs(dx) + Math.abs(dy) < THRESHOLD) return;
-    moved = true;
+    if (!active && Math.hypot(dx, dy) < THRESHOLD) return;
+    active = true;
     el.scrollLeft = scrollLeft - dx;
     el.scrollTop = scrollTop - dy;
+    e.preventDefault();
   });
-  window.addEventListener('mouseup', function() { startX = null; el.style.cursor = 'grab'; });
+  window.addEventListener('mouseup', function() { startX = null; active = false; el.style.cursor = 'grab'; });
 
-  // touch ~ solo previene el scroll de pagina si el bracket tiene recorrido en esa direccion
-  // si ya llego al limite vertical, deja que la pagina scrollee normalmente (scroll chaining)
+  // touch drag
   el.addEventListener('touchstart', function(e) {
     startX = e.touches[0].clientX; startY = e.touches[0].clientY;
     scrollLeft = el.scrollLeft; scrollTop = el.scrollTop;
-    moved = false;
+    active = false;
   }, { passive: true });
 
   el.addEventListener('touchmove', function(e) {
+    if (startX == null) return;
     var dx = e.touches[0].clientX - startX;
     var dy = e.touches[0].clientY - startY;
-    if (!moved && Math.abs(dx) + Math.abs(dy) < THRESHOLD) return;
-    moved = true;
+    if (!active && Math.hypot(dx, dy) < THRESHOLD) return;
+    active = true;
 
-    var atTop = el.scrollTop === 0;
+    // si esta al fondo del bracket y sigue bajando, deja que la pagina scrollee
     var atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
-    var atLeft = el.scrollLeft === 0;
-    var atRight = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+    if (atBottom && dy > 0) return;
 
-    // si hay recorrido disponible en el bracket, pan el bracket y bloquea pagina
-    var canScrollX = (!atLeft && dx > 0) || (!atRight && dx < 0);
-    var canScrollY = (!atTop && dy > 0) || (!atBottom && dy < 0);
-
-    if (canScrollX || canScrollY) {
-      e.preventDefault();
-      el.scrollLeft = scrollLeft - dx;
-      el.scrollTop = scrollTop - dy;
-    }
-    // si no hay recorrido (ej: ya esta al fondo), no previene — pagina scrollea normal
+    e.preventDefault();
+    el.scrollLeft = scrollLeft - dx;
+    el.scrollTop = scrollTop - dy;
   }, { passive: false });
+
+  el.addEventListener('touchend', function() { active = false; });
 })();
 (function() {
   var bracketView = document.getElementById('knockoutBracketView');

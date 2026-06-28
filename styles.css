@@ -367,6 +367,7 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
   background: linear-gradient(90deg, transparent, rgba(155,48,255,0.5), transparent); z-index: 3;
 }
 .knockout-content { padding: 40px 0; display: flex; flex-direction: column; align-items: center; width: 100%; }
+#knockoutBracketView { width: 100%; }
 #groupStageView { width: 100%; box-sizing: border-box; }
 .ko-rotate-hint { font-size: 11px; color: var(--text-muted); text-align: center; display: none; align-items: center; justify-content: center; gap: 6px; margin-top: 12px; }
 .rotate-icon { animation: rotatePhone 2.5s ease-in-out infinite; transform-origin: center; flex-shrink: 0; }
