@@ -721,19 +721,16 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
   }, { passive: true });
 })();
 (function() {
-  var btn = document.getElementById('btnToggleGroupStage');
   var bracketView = document.getElementById('knockoutBracketView');
   var groupView = document.getElementById('groupStageView');
-  if (!btn) return;
-  var showingGroup = false;
+  var btnToGroup = document.getElementById('btnToggleGroupStage');
+  var btnToBracket = document.getElementById('btnBackToBracket');
+  if (!bracketView || !groupView) return;
   var loaded = false;
-  btn.addEventListener('click', function() {
-    showingGroup = !showingGroup;
-    bracketView.style.display = showingGroup ? 'none' : '';
-    groupView.style.display = showingGroup ? '' : 'none';
-    btn.innerHTML = showingGroup ? '&#8592; Knockout Bracket' : '&#9654; Group Stage Predictions';
-    if (showingGroup && !loaded) { loaded = true; loadPartidos(); }
-  });
+  function showGroup() { bracketView.style.display = 'none'; groupView.style.display = ''; if (!loaded) { loaded = true; loadPartidos(); } }
+  function showBracket() { groupView.style.display = 'none'; bracketView.style.display = ''; }
+  if (btnToGroup) btnToGroup.addEventListener('click', showGroup);
+  if (btnToBracket) btnToBracket.addEventListener('click', showBracket);
 })();
 (function() {
   var burger = document.getElementById('burger');
