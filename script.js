@@ -733,6 +733,14 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
   }, { passive: true });
 
   el.addEventListener('touchend', function() { active = false; el._touchStartY = null; });
+
+  // centrar la vista inicial en el trophy (centro del bracket)
+  function centerBracket() {
+    el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
+  }
+  // esperar a que el bracket este renderizado
+  if (el.scrollWidth > el.clientWidth) centerBracket();
+  else setTimeout(centerBracket, 500);
 })();
 (function() {
   var bracketView = document.getElementById('knockoutBracketView');
