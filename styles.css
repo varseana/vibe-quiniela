@@ -380,6 +380,15 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .ko-round { display: flex; flex-direction: column; min-width: 155px; }
 .ko-round-header { text-align: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); padding: 6px; margin: 0 4px 8px; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: var(--font-display); }
 .ko-round-matches { display: flex; flex-direction: column; justify-content: space-around; flex: 1; gap: 8px; padding: 0 4px; }
+@media (max-width: 900px) {
+  .ko-round { min-width: 110px; }
+  .ko-final-col { min-width: 140px; }
+  .ko-trophy-inner { width: 90px; }
+  .ko-round-header { font-size: 7px; letter-spacing: 0.8px; }
+  .partido-team { font-size: 10px; }
+  .partido-score { font-size: 16px; }
+  .bracket-scroll { padding: 8px 12px; }
+}
 .ko-round-matches .partido-card { cursor: pointer; min-width: 200px; }
 .btn-back-stage {
   position: absolute; right: 24px; top: 24px;
