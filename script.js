@@ -309,6 +309,21 @@ function getFilteredPartidos() {
   if (activeSort === 'group') list.sort((a, b) => a.grupo.localeCompare(b.grupo) || a.fecha.localeCompare(b.fecha) || a.hora.localeCompare(b.hora));
   return list;
 }
+function renderHistoryCard(p, phaseClass) {
+  const pred = userPredictions[p.partido_id];
+  const pts = calcPoints(pred, p);
+  var predLine = '';
+  if (pred) {
+    predLine = '<div class="partido-prediction">Your prediction: ' + pred.gol_local + ' - ' + pred.gol_visitante;
+    if (pts) predLine += ' <span class="pts-badge pts-badge--' + pts.pts + '">' + pts.label + '</span>';
+    predLine += '</div>';
+  }
+  return '<div class="glass-card partido-card partido-card--locked partido-card--' + phaseClass + '">' +
+    '<div class="partido-header"><span class="partido-fase">' + esc(p.fase) + '</span><span class="partido-status finalizado">Final</span></div>' +
+    '<div class="partido-teams"><div class="partido-team">' + esc(p.local) + '</div><div class="partido-score">' + p.gol_local + ' - ' + p.gol_visitante + '</div><div class="partido-team">' + esc(p.visitante) + '</div></div>' +
+    '<div class="partido-date">' + formatFecha(p.fecha) + ' - ' + formatHora(p.hora) + '</div>' +
+    predLine + '</div>';
+}
 async function loadPartidos() {
   const el = document.getElementById('partidosGrid');
   if (!el) return;
@@ -318,6 +333,33 @@ async function loadPartidos() {
     allPartidos = all.filter(p => koFases.indexOf(p.fase) === -1);
     await loadUserPredictions();
     renderPartidos(getFilteredPartidos());
+    // render R32 y R16 finalizados en el history toggle
+    var r32Grid = document.getElementById('r32Grid');
+    if (r32Grid) {
+      var finishedKo = all.filter(p => (p.fase === 'Round of 32' || p.fase === 'Round of 16') && p.status === 'finalizado');
+      var r16Matches = finishedKo.filter(p => p.fase === 'Round of 16');
+      var r32Matches = finishedKo.filter(p => p.fase === 'Round of 32');
+
+      var html = '';
+
+      // R16 on top (most recent)
+      if (r16Matches.length > 0) {
+        html += '<div class="phase-divider"><span class="phase-badge phase-badge--r16">Round of 16</span></div>';
+        html += '<div class="partidos-grid">' + r16Matches.map(p => renderHistoryCard(p, 'r16')).join('') + '</div>';
+      }
+
+      // R32
+      if (r32Matches.length > 0) {
+        html += '<div class="phase-divider"><span class="phase-badge phase-badge--r32">Round of 32</span></div>';
+        html += '<div class="partidos-grid">' + r32Matches.map(p => renderHistoryCard(p, 'r32')).join('') + '</div>';
+      }
+
+      if (html) {
+        r32Grid.innerHTML = html;
+      } else {
+        r32Grid.innerHTML = '<div class="glass-card partido-card"><p class="placeholder-text" style="color:var(--text-muted);font-size:11px;">No knockout results yet</p></div>';
+      }
+    }
   } catch { el.innerHTML = '<div class="glass-card partido-card"><p class="placeholder-text">Error</p></div>'; }
 }
 function formatFecha(f) { if (!f) return ''; const parts = f.match(/(\d{4})-(\d{2})-(\d{2})/); if (!parts) return f; const d = new Date(+parts[1], +parts[2]-1, +parts[3]); return d.toLocaleDateString(lang === 'es' ? 'es-CR' : 'en-US', { month:'short', day:'numeric' }); }
@@ -483,15 +525,11 @@ startChampionCountdown(); populateTeams(); setLang(lang); updateUserUI(); update
 // lee getPartidos y filtra por fase para construir el bracket dinamicamente
 // el array ROUND_ORDER mapea fase → columna del bracket (left o right del trophy)
 var KO_ROUND_ORDER = [
-  { key: 'r32l', label: 'Round of 32', fase: 'Round of 32', side: 'left', slots: 8 },
-  { key: 'r16l', label: 'Round of 16', fase: 'Round of 16', side: 'left', slots: 4 },
   { key: 'qfl',  label: 'Quarter-Finals', fase: 'Quarter-Finals', side: 'left', slots: 2 },
   { key: 'semil', label: 'Semi-Finals', fase: 'Semi-Finals', side: 'left', slots: 1 },
   { key: 'final', label: 'Final', fase: 'Final', side: 'center', slots: 1 },
   { key: 'semir', label: 'Semi-Finals', fase: 'Semi-Finals', side: 'right', slots: 1 },
-  { key: 'qfr',  label: 'Quarter-Finals', fase: 'Quarter-Finals', side: 'right', slots: 2 },
-  { key: 'r16r', label: 'Round of 16', fase: 'Round of 16', side: 'right', slots: 4 },
-  { key: 'r32r', label: 'Round of 32', fase: 'Round of 32', side: 'right', slots: 8 }
+  { key: 'qfr',  label: 'Quarter-Finals', fase: 'Quarter-Finals', side: 'right', slots: 2 }
 ];
 var koPredictions = {};
 

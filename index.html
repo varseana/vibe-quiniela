@@ -204,7 +204,7 @@
         <p class="section-desc" style="margin-top:8px">Click a match to predict. Rounds unlock progressively.</p>
       </div>
       <div id="knockoutBracketView">
-      <div style="text-align:center;margin-bottom:16px"><button class="btn btn-glass" id="btnToggleGroupStage">&#9654; Group Stage Predictions</button></div>
+      <div style="text-align:center;margin-bottom:16px"><button class="btn btn-glass" id="btnToggleGroupStage">&#9654; Past Predictions (Group + R32)</button></div>
       <div class="bracket-scroll">
         <div class="bracket" id="bracketGrid"></div>
       </div>
@@ -212,9 +212,14 @@
       </div>
       <div id="groupStageView" style="display:none;padding:0 24px 24px">
         <div style="text-align:center;margin-bottom:20px"><button class="btn btn-glass" id="btnBackToBracket">&#8592; Knockout Bracket</button></div>
-        <div class="section-header" style="text-align:center;margin-bottom:16px">
-          <h3 style="font-family:var(--font-display);font-size:22px;font-weight:700">Your Group Stage Predictions</h3>
+        <div class="section-header" style="text-align:center;margin-bottom:8px">
+          <h3 style="font-family:var(--font-display);font-size:22px;font-weight:700"><span class="gradient-text">Your Past Predictions</span></h3>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">Knockout and Group Stage results</p>
         </div>
+        <div id="r32Grid">
+          <div class="glass-card partido-card placeholder-card"><p class="placeholder-text" data-i18n="loading">Loading...</p></div>
+        </div>
+        <div class="phase-divider"><span class="phase-badge phase-badge--group">Group Stage</span></div>
         <div class="partidos-grid" id="partidosGrid">
           <div class="glass-card partido-card placeholder-card"><p class="placeholder-text" data-i18n="loading">Loading...</p></div>
         </div>
@@ -226,15 +231,11 @@
 // inline bracket render ~ no depende de script.js para mostrar los cuadros
 (function() {
   var ROUNDS = [
-    { id:'r32l', label:'Round of 32', slots:8 },
-    { id:'r16l', label:'Round of 16', slots:4 },
     { id:'qfl',  label:'Quarter-Finals', slots:2 },
     { id:'semil',label:'Semi-Finals', slots:1 },
     { id:'finalm',label:'Final', slots:0, isFinal:true },
     { id:'semir',label:'Semi-Finals', slots:1 },
-    { id:'qfr',  label:'Quarter-Finals', slots:2 },
-    { id:'r16r', label:'Round of 16', slots:4 },
-    { id:'r32r', label:'Round of 32', slots:8 }
+    { id:'qfr',  label:'Quarter-Finals', slots:2 }
   ];
   var grid = document.getElementById('bracketGrid');
   if (!grid) return;
