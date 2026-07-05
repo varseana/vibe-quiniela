@@ -333,22 +333,12 @@ async function loadPartidos() {
     allPartidos = all.filter(p => koFases.indexOf(p.fase) === -1);
     await loadUserPredictions();
     renderPartidos(getFilteredPartidos());
-    // render R32 y R16 finalizados en el history toggle
+    // render R32 finalizados en el history toggle
     var r32Grid = document.getElementById('r32Grid');
     if (r32Grid) {
-      var finishedKo = all.filter(p => (p.fase === 'Round of 32' || p.fase === 'Round of 16') && p.status === 'finalizado');
-      var r16Matches = finishedKo.filter(p => p.fase === 'Round of 16');
-      var r32Matches = finishedKo.filter(p => p.fase === 'Round of 32');
+      var r32Matches = all.filter(p => p.fase === 'Round of 32' && p.status === 'finalizado');
 
       var html = '';
-
-      // R16 on top (most recent)
-      if (r16Matches.length > 0) {
-        html += '<div class="phase-divider"><span class="phase-badge phase-badge--r16">Round of 16</span></div>';
-        html += '<div class="partidos-grid">' + r16Matches.map(p => renderHistoryCard(p, 'r16')).join('') + '</div>';
-      }
-
-      // R32
       if (r32Matches.length > 0) {
         html += '<div class="phase-divider"><span class="phase-badge phase-badge--r32">Round of 32</span></div>';
         html += '<div class="partidos-grid">' + r32Matches.map(p => renderHistoryCard(p, 'r32')).join('') + '</div>';
@@ -525,11 +515,13 @@ startChampionCountdown(); populateTeams(); setLang(lang); updateUserUI(); update
 // lee getPartidos y filtra por fase para construir el bracket dinamicamente
 // el array ROUND_ORDER mapea fase → columna del bracket (left o right del trophy)
 var KO_ROUND_ORDER = [
+  { key: 'r16l', label: 'Round of 16', fase: 'Round of 16', side: 'left', slots: 4 },
   { key: 'qfl',  label: 'Quarter-Finals', fase: 'Quarter-Finals', side: 'left', slots: 2 },
   { key: 'semil', label: 'Semi-Finals', fase: 'Semi-Finals', side: 'left', slots: 1 },
   { key: 'final', label: 'Final', fase: 'Final', side: 'center', slots: 1 },
   { key: 'semir', label: 'Semi-Finals', fase: 'Semi-Finals', side: 'right', slots: 1 },
-  { key: 'qfr',  label: 'Quarter-Finals', fase: 'Quarter-Finals', side: 'right', slots: 2 }
+  { key: 'qfr',  label: 'Quarter-Finals', fase: 'Quarter-Finals', side: 'right', slots: 2 },
+  { key: 'r16r', label: 'Round of 16', fase: 'Round of 16', side: 'right', slots: 4 }
 ];
 var koPredictions = {};
 

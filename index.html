@@ -231,11 +231,13 @@
 // inline bracket render ~ no depende de script.js para mostrar los cuadros
 (function() {
   var ROUNDS = [
+    { id:'r16l', label:'Round of 16', slots:4 },
     { id:'qfl',  label:'Quarter-Finals', slots:2 },
     { id:'semil',label:'Semi-Finals', slots:1 },
     { id:'finalm',label:'Final', slots:0, isFinal:true },
     { id:'semir',label:'Semi-Finals', slots:1 },
-    { id:'qfr',  label:'Quarter-Finals', slots:2 }
+    { id:'qfr',  label:'Quarter-Finals', slots:2 },
+    { id:'r16r', label:'Round of 16', slots:4 }
   ];
   var grid = document.getElementById('bracketGrid');
   if (!grid) return;
