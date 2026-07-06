@@ -471,20 +471,20 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .phase-divider::before, .phase-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--divider), transparent); }
 .phase-badge { padding: 5px 14px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; font-family: var(--font-display); }
 .phase-badge--group { background: rgba(155,48,255,0.1); border: 1px solid rgba(155,48,255,0.2); color: var(--vibe-purple); }
-.phase-badge--r32 { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: #f59e0b; }
-.phase-badge--r16 { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.2); color: #22d3ee; }
+.phase-badge--r32 { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.2); color: #22d3ee; }
+.phase-badge--r16 { background: rgba(129,140,248,0.1); border: 1px solid rgba(129,140,248,0.2); color: #818cf8; }
 .phase-badge--qf { background: rgba(200,80,192,0.1); border: 1px solid rgba(200,80,192,0.2); color: #c850c0; }
-.phase-badge--sf { background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.2); color: #f43f5e; }
-.phase-badge--final { background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.25); color: #ffd700; }
+.phase-badge--sf { background: rgba(251,113,133,0.1); border: 1px solid rgba(251,113,133,0.2); color: #fb7185; }
+.phase-badge--final { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.25); color: #fbbf24; }
 
-/* phase-specific card accents */
-.partido-card--r32 { border-left: 3px solid rgba(245,158,11,0.4); background: rgba(245,158,11,0.03); }
-.partido-card--r32 .partido-fase { color: #fbbf24 !important; }
-.partido-card--r16 { border-left: 3px solid rgba(34,211,238,0.4); background: rgba(34,211,238,0.03); }
-.partido-card--r16 .partido-fase { color: #22d3ee !important; }
-.partido-card--qf { border-left: 3px solid rgba(200,80,192,0.4); background: rgba(200,80,192,0.03); }
+/* phase-specific card accents (no left border ~ background + fase color only) */
+.partido-card--r32 { background: rgba(34,211,238,0.03); }
+.partido-card--r32 .partido-fase { color: #22d3ee !important; }
+.partido-card--r16 { background: rgba(129,140,248,0.03); }
+.partido-card--r16 .partido-fase { color: #818cf8 !important; }
+.partido-card--qf { background: rgba(200,80,192,0.03); }
 .partido-card--qf .partido-fase { color: #c850c0 !important; }
-.partido-card--sf { border-left: 3px solid rgba(244,63,94,0.4); background: rgba(244,63,94,0.03); }
-.partido-card--sf .partido-fase { color: #f43f5e !important; }
-.partido-card--final { border-left: 3px solid rgba(255,215,0,0.5); background: rgba(255,215,0,0.04); }
-.partido-card--final .partido-fase { color: #ffd700 !important; }
+.partido-card--sf { background: rgba(251,113,133,0.03); }
+.partido-card--sf .partido-fase { color: #fb7185 !important; }
+.partido-card--final { background: rgba(251,191,36,0.04); }
+.partido-card--final .partido-fase { color: #fbbf24 !important; }
