@@ -291,7 +291,7 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 /* champion */
 .section-desc { font-size: 15px; color: var(--text-secondary); margin-top: var(--sp-4); max-width: 500px; margin-inline: auto; }
 .champion-row { display: flex; align-items: stretch; justify-content: center; gap: var(--sp-5); flex-wrap: wrap; max-width: 900px; margin: 0 auto; }
-.champion-card { padding: var(--sp-5) var(--sp-7); text-align: center; flex: 1 1 420px; max-width: 500px; }
+.champion-card { padding: var(--sp-6) var(--sp-6); text-align: center; flex: 1 1 300px; max-width: 380px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-3); }
 .champion-plus { display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 40px; font-weight: 800; line-height: 1; background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-magenta)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; flex: 0 0 auto; }
 .bonus-info-card { padding: var(--sp-6) var(--sp-6); text-align: center; flex: 1 1 300px; max-width: 380px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-3); }
 .bonus-info-tag { display: inline-block; padding: var(--sp-1) var(--sp-4); border-radius: 50px; font-family: var(--font-display); font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #fff; background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-magenta)); }
@@ -314,12 +314,11 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .champion-select option { background: var(--bg); color: var(--text-primary); padding: var(--sp-2); }
 .champion-select:focus { outline: none; border-color: var(--vibe-purple); box-shadow: 0 0 16px rgba(155,48,255,0.25); }
 .champion-select:disabled { opacity: 0.4; cursor: not-allowed; }
-.champion-current { margin-top: var(--sp-5); font-size: 15px; color: var(--text-secondary); }
+.champion-current { font-size: 15px; color: var(--text-secondary); }
 .champion-current strong { color: var(--vibe-purple); font-weight: 700; font-size: 18px; }
 .champion-locked {
-  margin-top: var(--sp-5); padding: var(--sp-3) var(--sp-5); border-radius: 50px;
-  background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
-  font-size: 13px; color: var(--text-muted); display: inline-block;
+  margin-top: auto; padding-top: var(--sp-3);
+  font-size: 12px; color: var(--text-muted); letter-spacing: 0.5px;
 }
 #champion .section-header { margin-bottom: var(--sp-6); }
 #champion { padding: var(--sp-9) 0; }

@@ -178,20 +178,23 @@
 <section class="section" id="champion">
   <div class="container">
     <div class="section-header">
-      <span class="section-badge" data-i18n="champ_badge">Bonus</span>
-      <h2 class="section-title"><span class="gradient-text" data-i18n="champ_title">Pick Your Champion</span></h2>
-      <p class="section-desc" data-i18n="champ_desc">Choose who you think will win the World Cup. Worth 10 bonus points. Locks when the tournament starts.</p>
+      <span class="section-badge" data-i18n="champ_badge">Extra</span>
+      <h2 class="section-title"><span class="gradient-text" data-i18n="champ_title">Bonus Points</span></h2>
+      <p class="section-desc" data-i18n="champ_desc">Two extra ways to rack up points before and during the tournament.</p>
     </div>
     <div class="champion-row">
       <div class="glass-card champion-card">
+        <span class="bonus-info-tag" data-i18n="champ_card_tag">Bonus</span>
+        <h3 class="bonus-info-title" data-i18n="champ_card_title">World Cup Champion</h3>
+        <p class="bonus-info-desc" data-i18n="champ_card_desc">Worth 10 bonus points. Locks June 24.</p>
         <div class="champion-inner" id="championInner">
           <select id="championSelect" class="champion-select"><option value="">-- Select a team --</option></select>
           <button class="btn btn-glow" id="btnChampion" data-i18n="champ_save">Save Pick</button>
         </div>
         <div class="champion-current" id="championCurrent"></div>
-        <div class="champion-locked" id="championLocked" style="display:none"><span data-i18n="champ_locked">Predictions are locked. The tournament has started.</span></div>
         <div class="champ-countdown" id="champCountdown"></div>
         <p class="form-msg" id="championMsg"></p>
+        <div class="champion-locked" id="championLocked" style="display:none"><span data-i18n="champ_locked">Prediction for champ is locked.</span></div>
       </div>
       <div class="champion-plus" aria-hidden="true">+</div>
       <div class="glass-card bonus-info-card">

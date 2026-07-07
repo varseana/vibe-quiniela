@@ -13,8 +13,9 @@ const T = {
     nav_home:'Home', nav_champion:'Champion', nav_matches:'Matches', nav_rules:'Rules', nav_register:'Register', nav_login:'Login',
     hero_title:'World Cup Predictions 2026', hero_sub:'Predict the results of the FIFA World Cup USA/Mexico/Canada. Compete with all of TSE. Win prizes.',
     days:'Days', hours:'Hours', hero_join:'Join the Pool', hero_rules:'View Rules',
-    champ_badge:'Bonus', champ_title:'Pick Your Champion', champ_desc:'Choose who you think will win the World Cup. Worth 10 bonus points. Locks on June 24.',
-    champ_save:'Save Pick', champ_locked:'Predictions are locked. The tournament has started.',
+    champ_badge:'Extra', champ_title:'Bonus Points', champ_desc:'Two extra ways to rack up points before and during the tournament.',
+    champ_card_tag:'Bonus', champ_card_title:'World Cup Champion', champ_card_desc:'Worth 10 bonus points. Locks June 24.',
+    champ_save:'Save Pick', champ_locked:'Prediction for champ is locked.', champ_no_pick_locked:'You did not pick a winner on time :(',
     bonus_info_tag:'Bonus', bonus_info_title:'Third Place Playoff', bonus_info_desc:'Predict the third-place match too, right under the trophy in the bracket. Same scoring: +5 for an exact score, +2 for the correct winner.',
     match_badge:'Matches', match_title:'Group Stage', filter_all:'All', filter_pending:'Pending', filter_done:'Finished', loading:'Loading...',
     lb_title:'Standings', lb_player:'Player', lb_exact:'Exact', lb_correct:'Correct', lb_champ:'Champ', lb_pts:'Points',
@@ -38,8 +39,9 @@ const T = {
     nav_home:'Inicio', nav_champion:'Campeon', nav_matches:'Partidos', nav_rules:'Reglas', nav_register:'Registrarse', nav_login:'Ingresar',
     hero_title:'Quiniela Mundial 2026', hero_sub:'Predice los resultados del Mundial USA/Mexico/Canada. Compite con todo TSE. Gana premios.',
     days:'Dias', hours:'Horas', hero_join:'Unirme a la Quiniela', hero_rules:'Ver Reglas',
-    champ_badge:'Bonus', champ_title:'Elige al Campeon', champ_desc:'Elige quien crees que ganara el Mundial. Vale 10 puntos bonus. Se bloquea el 24 de Junio.',
-    champ_save:'Guardar', champ_locked:'Las predicciones estan bloqueadas. El torneo ya inicio.',
+    champ_badge:'Extra', champ_title:'Puntos Bonus', champ_desc:'Dos formas extra de sumar puntos antes y durante el torneo.',
+    champ_card_tag:'Bonus', champ_card_title:'Campeon del Mundial', champ_card_desc:'Vale 10 puntos bonus. Se bloquea el 24 de Junio.',
+    champ_save:'Guardar', champ_locked:'La prediccion de campeon esta bloqueada.', champ_no_pick_locked:'No elegiste un campeon a tiempo :(',
     bonus_info_tag:'Bonus', bonus_info_title:'Partido por el Tercer Lugar', bonus_info_desc:'Predice tambien el partido por el tercer lugar, justo debajo del trofeo en el bracket. Mismo puntaje: +5 por marcador exacto, +2 por acertar al ganador.',
     match_badge:'Partidos', match_title:'Fase de Grupos', filter_all:'Todos', filter_pending:'Pendientes', filter_done:'Finalizados', loading:'Cargando...',
     lb_title:'Tabla de Posiciones', lb_player:'Jugador', lb_exact:'Exactos', lb_correct:'Aciertos', lb_champ:'Campeon', lb_pts:'Puntos',
@@ -272,7 +274,7 @@ async function loadChampion() {
         : `${t('your_pick')} <strong>${res.equipo}</strong>`;
       document.getElementById('championSelect').value = res.equipo;
     } else {
-      cur.textContent = isLocked() ? '' : t('no_pick');
+      cur.textContent = isLocked() ? t('champ_no_pick_locked') : t('no_pick');
     }
   } catch {}
 }
