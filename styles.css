@@ -423,6 +423,25 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .ko-trophy-inner { width: 140px; height: auto; filter: drop-shadow(0 0 30px rgba(255,215,0,0.3)) drop-shadow(0 0 60px rgba(155,48,255,0.2)); animation: koFloat 4s ease-in-out infinite; }
 .ko-final-label { font-family: var(--font-display); font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin-top: 8px; }
 .ko-final-col::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%); animation: koGlow 3s ease-in-out infinite; pointer-events: none; }
+
+/* tercer lugar (bonus) ~ carta debajo del trofeo, offset hacia abajo, sobre el glow */
+.ko-third-place { margin-top: 48px; min-width: 220px; position: relative; z-index: 2; }
+/* barra BONUS de lado a lado dentro del card (compensa el padding con margen negativo) ~ esquema champion select */
+.partido-bonus-bar {
+  margin: calc(var(--sp-5) * -1) calc(var(--sp-5) * -1) var(--sp-4);
+  padding: 6px 0; text-align: center;
+  font-family: var(--font-display); font-size: 10px; font-weight: 800;
+  letter-spacing: 3px; text-transform: uppercase; color: #fff;
+  background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-magenta));
+}
+/* velo difuminado sobre el cuerpo en estado coming soon (no tapa la barra BONUS) */
+.partido-card--coming { position: relative; overflow: hidden; }
+.partido-card--coming::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; top: 34px;
+  background: rgba(14,14,34,0.25); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+}
+
 @keyframes koFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 @keyframes koGlow { 0%,100% { opacity: 0.5; transform: translate(-50%,-60%) scale(1); } 50% { opacity: 1; transform: translate(-50%,-60%) scale(1.15); } }
 

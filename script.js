@@ -329,7 +329,7 @@ async function loadPartidos() {
   if (!el) return;
   try {
     const all = await apiGet('getPartidos');
-    const koFases = ['Round of 32','Round of 16','Quarter-Finals','Semi-Finals','Final'];
+    const koFases = ['Round of 32','Round of 16','Quarter-Finals','Semi-Finals','Third Place','Final'];
     allPartidos = all.filter(p => koFases.indexOf(p.fase) === -1);
     await loadUserPredictions();
     renderPartidos(getFilteredPartidos());
@@ -541,7 +541,7 @@ async function loadKnockout() {
   // cargar partidos del sheet
   try {
     var all = await apiGet('getPartidos');
-    var koFases = ['Round of 32','Round of 16','Quarter-Finals','Semi-Finals','Final'];
+    var koFases = ['Round of 32','Round of 16','Quarter-Finals','Semi-Finals','Third Place','Final'];
     partidos = all.filter(function(p) { return koFases.indexOf(p.fase) !== -1; });
   } catch(e) {}
 
@@ -578,6 +578,11 @@ function renderKnockout(partidos) {
       var lbl = document.createElement('div');
       lbl.className = 'ko-final-label'; lbl.textContent = 'WORLD CHAMPIONS';
       col.appendChild(lbl);
+      // tercer lugar (bonus) ~ debajo del trofeo, offset hacia abajo
+      var thirdMatch = partidos.filter(function(p) { return p.fase === 'Third Place'; })[0] || null;
+      var thirdCard = buildKoCard(thirdMatch, 'Third Place');
+      thirdCard.classList.add('ko-third-place');
+      col.appendChild(thirdCard);
       grid.appendChild(col);
       return;
     }
@@ -614,13 +619,17 @@ function buildKoCard(p, roundLabel) {
   var hasPartial = hasLocal || hasVisitante;
   var isFinished = p && p.status === 'finalizado';
   var fase = roundLabel || (p ? p.fase : 'Round of 32');
+  // barra BONUS edge-to-edge para el partido de tercer lugar
+  var isBonus = fase === 'Third Place';
+  var bonusBar = isBonus ? '<div class="partido-bonus-bar">Bonus</div>' : '';
 
   var card = document.createElement('div');
 
   // estado 1: sin datos ~ coming soon
   if (!hasPartial) {
-    card.className = 'glass-card partido-card partido-card--locked ko-coming-soon';
-    card.innerHTML = '<div class="partido-header"><span class="partido-fase">' + esc(fase) + '</span></div>' +
+    card.className = 'glass-card partido-card partido-card--locked ko-coming-soon' + (isBonus ? ' partido-card--coming' : '');
+    card.innerHTML = bonusBar +
+      '<div class="partido-header"><span class="partido-fase">' + esc(fase) + '</span></div>' +
       '<div class="ko-coming-label">Coming Soon</div>';
     return card;
   }
@@ -630,7 +639,8 @@ function buildKoCard(p, roundLabel) {
     card.className = 'glass-card partido-card partido-card--locked';
     var teamA = hasLocal ? esc(p.local) : 'TBD';
     var teamB = hasVisitante ? esc(p.visitante) : 'TBD';
-    card.innerHTML = '<div class="partido-header"><span class="partido-fase">' + esc(fase) + '</span></div>' +
+    card.innerHTML = bonusBar +
+      '<div class="partido-header"><span class="partido-fase">' + esc(fase) + '</span></div>' +
       '<div class="partido-teams"><div class="partido-team">' + teamA + '</div><div class="partido-vs">vs</div><div class="partido-team">' + teamB + '</div></div>' +
       (p.fecha ? '<div class="partido-date">' + formatFecha(p.fecha) + ' - ' + formatHora(p.hora) + '</div>' : '') +
       '<div class="partido-bet partido-bet--waiting">Waiting for teams</div>';
@@ -697,7 +707,7 @@ function buildKoCard(p, roundLabel) {
     predLine += '</div>';
   }
 
-  card.innerHTML =
+  card.innerHTML = bonusBar +
     '<div class="partido-header"><span class="partido-fase">' + esc(fase) + '</span>' + statusBadge + '</div>' +
     teamsRow +
     (dateStr ? '<div class="partido-date">' + dateStr + '</div>' : '') +
