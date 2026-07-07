@@ -7,6 +7,13 @@ function esc(s) { var d = document.createElement('div'); d.textContent = s || ''
 // 48 teams
 const TEAMS = ['Algeria','Argentina','Australia','Austria','Belgium','Bosnia and Herzegovina','Brazil','Canada','Cape Verde','Colombia','Croatia','Curacao','Czech Republic','DR Congo','Ecuador','Egypt','England','France','Germany','Ghana','Haiti','Iran','Iraq','Ivory Coast','Japan','Jordan','Mexico','Morocco','Netherlands','New Zealand','Norway','Panama','Paraguay','Portugal','Qatar','Saudi Arabia','Scotland','Senegal','South Africa','South Korea','Spain','Sweden','Switzerland','Tunisia','Turkiye','Uruguay','USA','Uzbekistan'];
 
+// country name -> ISO code for flag images (flagcdn.com). England/Scotland use GB subdivisions.
+const FLAG_CODES = {
+  'Algeria':'dz','Argentina':'ar','Australia':'au','Austria':'at','Belgium':'be','Bosnia and Herzegovina':'ba','Brazil':'br','Canada':'ca','Cape Verde':'cv','Colombia':'co','Croatia':'hr','Curacao':'cw','Czech Republic':'cz','DR Congo':'cd','Ecuador':'ec','Egypt':'eg','England':'gb-eng','France':'fr','Germany':'de','Ghana':'gh','Haiti':'ht','Iran':'ir','Iraq':'iq','Ivory Coast':'ci','Japan':'jp','Jordan':'jo','Mexico':'mx','Morocco':'ma','Netherlands':'nl','New Zealand':'nz','Norway':'no','Panama':'pa','Paraguay':'py','Portugal':'pt','Qatar':'qa','Saudi Arabia':'sa','Scotland':'gb-sct','Senegal':'sn','South Africa':'za','South Korea':'kr','Spain':'es','Sweden':'se','Switzerland':'ch','Tunisia':'tn','Turkiye':'tr','Uruguay':'uy','USA':'us','Uzbekistan':'uz'
+};
+function flagUrl(team) { const c = FLAG_CODES[team]; return c ? `https://flagcdn.com/w80/${c}.png` : ''; }
+function flagImg(team) { const u = flagUrl(team); return u ? `<img class="champ-pick-flag" src="${u}" alt="${team} flag" loading="lazy">` : ''; }
+
 // i18n
 const T = {
   en: {
@@ -15,7 +22,7 @@ const T = {
     days:'Days', hours:'Hours', hero_join:'Join the Pool', hero_rules:'View Rules',
     champ_badge:'Extra', champ_title:'Bonus Points', champ_desc:'Two extra ways to rack up points before and during the tournament.',
     champ_card_tag:'Bonus', champ_card_title:'World Cup Champion', champ_card_desc:'Worth 10 bonus points. Locks June 24.',
-    champ_save:'Save Pick', champ_locked:'Prediction for champ is locked.', champ_no_pick_locked:'You did not pick a winner on time :(',
+    champ_save:'Save Pick', champ_locked:'Prediction for champ is locked.', champ_no_pick_locked:'You did not pick a winner on time :(', you_picked:'You picked:',
     bonus_info_tag:'Bonus', bonus_info_title:'Third Place Playoff', bonus_info_desc:'Predict the third-place match too, right under the trophy in the bracket. Same scoring: +5 for an exact score, +2 for the correct winner.',
     match_badge:'Matches', match_title:'Group Stage', filter_all:'All', filter_pending:'Pending', filter_done:'Finished', loading:'Loading...',
     lb_title:'Standings', lb_player:'Player', lb_exact:'Exact', lb_correct:'Correct', lb_champ:'Champ', lb_pts:'Points',
@@ -41,7 +48,7 @@ const T = {
     days:'Dias', hours:'Horas', hero_join:'Unirme a la Quiniela', hero_rules:'Ver Reglas',
     champ_badge:'Extra', champ_title:'Puntos Bonus', champ_desc:'Dos formas extra de sumar puntos antes y durante el torneo.',
     champ_card_tag:'Bonus', champ_card_title:'Campeon del Mundial', champ_card_desc:'Vale 10 puntos bonus. Se bloquea el 24 de Junio.',
-    champ_save:'Guardar', champ_locked:'La prediccion de campeon esta bloqueada.', champ_no_pick_locked:'No elegiste un campeon a tiempo :(',
+    champ_save:'Guardar', champ_locked:'La prediccion de campeon esta bloqueada.', champ_no_pick_locked:'No elegiste un campeon a tiempo :(', you_picked:'Elegiste:',
     bonus_info_tag:'Bonus', bonus_info_title:'Partido por el Tercer Lugar', bonus_info_desc:'Predice tambien el partido por el tercer lugar, justo debajo del trofeo en el bracket. Mismo puntaje: +5 por marcador exacto, +2 por acertar al ganador.',
     match_badge:'Partidos', match_title:'Fase de Grupos', filter_all:'Todos', filter_pending:'Pendientes', filter_done:'Finalizados', loading:'Cargando...',
     lb_title:'Tabla de Posiciones', lb_player:'Jugador', lb_exact:'Exactos', lb_correct:'Aciertos', lb_champ:'Campeon', lb_pts:'Puntos',
@@ -270,11 +277,13 @@ async function loadChampion() {
     const cur = document.getElementById('championCurrent');
     if (res.equipo) {
       cur.innerHTML = isLocked()
-        ? `<span class="champ-pick-locked">&#127942; You picked: <strong>${res.equipo}</strong></span>`
+        ? `<span class="champ-pick-country"><strong>${res.equipo}</strong>${flagImg(res.equipo)}</span>`
         : `${t('your_pick')} <strong>${res.equipo}</strong>`;
       document.getElementById('championSelect').value = res.equipo;
     } else {
-      cur.textContent = isLocked() ? t('champ_no_pick_locked') : t('no_pick');
+      cur.innerHTML = isLocked()
+        ? `<span class="champ-pick-country champ-pick-country--none"><strong>${t('champ_no_pick_locked')}</strong></span>`
+        : t('no_pick');
     }
   } catch {}
 }
