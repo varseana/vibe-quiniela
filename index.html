@@ -182,15 +182,23 @@
       <h2 class="section-title"><span class="gradient-text" data-i18n="champ_title">Pick Your Champion</span></h2>
       <p class="section-desc" data-i18n="champ_desc">Choose who you think will win the World Cup. Worth 10 bonus points. Locks when the tournament starts.</p>
     </div>
-    <div class="glass-card champion-card">
-      <div class="champion-inner" id="championInner">
-        <select id="championSelect" class="champion-select"><option value="">-- Select a team --</option></select>
-        <button class="btn btn-glow" id="btnChampion" data-i18n="champ_save">Save Pick</button>
+    <div class="champion-row">
+      <div class="glass-card champion-card">
+        <div class="champion-inner" id="championInner">
+          <select id="championSelect" class="champion-select"><option value="">-- Select a team --</option></select>
+          <button class="btn btn-glow" id="btnChampion" data-i18n="champ_save">Save Pick</button>
+        </div>
+        <div class="champion-current" id="championCurrent"></div>
+        <div class="champion-locked" id="championLocked" style="display:none"><span data-i18n="champ_locked">Predictions are locked. The tournament has started.</span></div>
+        <div class="champ-countdown" id="champCountdown"></div>
+        <p class="form-msg" id="championMsg"></p>
       </div>
-      <div class="champion-current" id="championCurrent"></div>
-      <div class="champion-locked" id="championLocked" style="display:none"><span data-i18n="champ_locked">Predictions are locked. The tournament has started.</span></div>
-      <div class="champ-countdown" id="champCountdown"></div>
-      <p class="form-msg" id="championMsg"></p>
+      <div class="champion-plus" aria-hidden="true">+</div>
+      <div class="glass-card bonus-info-card">
+        <span class="bonus-info-tag" data-i18n="bonus_info_tag">Bonus</span>
+        <h3 class="bonus-info-title" data-i18n="bonus_info_title">Third Place Playoff</h3>
+        <p class="bonus-info-desc" data-i18n="bonus_info_desc">Predict the third-place match too, right under the trophy in the bracket. Same scoring: +5 for an exact score, +2 for the correct winner.</p>
+      </div>
     </div>
   </div>
 </section>
