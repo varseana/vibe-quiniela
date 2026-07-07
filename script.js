@@ -17,7 +17,7 @@ function flagImg(team) { const u = flagUrl(team); return u ? `<img class="champ-
 // i18n
 const T = {
   en: {
-    nav_home:'Home', nav_champion:'Champion', nav_matches:'Matches', nav_rules:'Rules', nav_register:'Register', nav_login:'Login',
+    nav_home:'Home', nav_champion:'Bonus', nav_matches:'Matches', nav_rules:'Rules', nav_register:'Register', nav_login:'Login',
     hero_title:'World Cup Predictions 2026', hero_sub:'Predict the results of the FIFA World Cup USA/Mexico/Canada. Compete with all of TSE. Win prizes.',
     days:'Days', hours:'Hours', hero_join:'Join the Pool', hero_rules:'View Rules',
     champ_badge:'Extra', champ_title:'Bonus Points', champ_desc:'Two extra ways to rack up points before and during the tournament.',
@@ -43,7 +43,7 @@ const T = {
     prizes_title:'Prizes', prize_1st:'1st Place', prize_2nd:'2nd Place', prize_3rd:'3rd Place', prize_raffle:'Raffle', prize_raffle_desc:'all participants',
   },
   es: {
-    nav_home:'Inicio', nav_champion:'Campeon', nav_matches:'Partidos', nav_rules:'Reglas', nav_register:'Registrarse', nav_login:'Ingresar',
+    nav_home:'Inicio', nav_champion:'Bonus', nav_matches:'Partidos', nav_rules:'Reglas', nav_register:'Registrarse', nav_login:'Ingresar',
     hero_title:'Quiniela Mundial 2026', hero_sub:'Predice los resultados del Mundial USA/Mexico/Canada. Compite con todo TSE. Gana premios.',
     days:'Dias', hours:'Horas', hero_join:'Unirme a la Quiniela', hero_rules:'Ver Reglas',
     champ_badge:'Extra', champ_title:'Puntos Bonus', champ_desc:'Dos formas extra de sumar puntos antes y durante el torneo.',
