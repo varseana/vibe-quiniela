@@ -415,19 +415,27 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .bracket-scroll { overflow-x: auto; overflow-y: hidden; padding: 16px 0; width: 100%; user-select: none; -webkit-user-select: none; cursor: grab; box-sizing: border-box; text-align: center; }
 .bracket-scroll::-webkit-scrollbar { height: 5px; }
 .bracket-scroll::-webkit-scrollbar-thumb { background: rgba(155,48,255,0.3); border-radius: 3px; }
-.bracket { display: inline-flex; align-items: stretch; gap: 0; min-width: max-content; padding: 0 40px; }
-.ko-round { display: flex; flex-direction: column; min-width: 155px; }
+.bracket { display: inline-flex; align-items: stretch; gap: 16px; min-width: max-content; padding: 0 40px; }
+.ko-round { display: flex; flex-direction: column; min-width: 300px; }
 .ko-round-header { text-align: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); padding: 6px; margin: 0 4px 8px; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: var(--font-display); }
-.ko-round-matches { display: flex; flex-direction: column; justify-content: space-around; flex: 1; gap: 8px; padding: 0 4px; }
+.ko-round-matches { display: flex; flex-direction: column; justify-content: space-around; flex: 1; gap: 16px; padding: 0 4px; }
+/* banderas dentro de las cartas KO ~ estilo FIFA (esquinas puntiagudas TL y BR) */
+.ko-round-matches .partido-team { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 16px; }
+.ko-round-matches .partido-team .champ-pick-flag { width: 64px; height: auto; aspect-ratio: 3/2; object-fit: cover; border-radius: 0 10px 0 10px; }
+/* bandera placeholder "?" para equipo que aun no clasifica */
+.flag-tbd { width: 64px; aspect-ratio: 3/2; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--text-muted); background: rgba(255,255,255,0.04); border: 1px dashed var(--glass-border); box-shadow: none; }
+.partido-team-name--tbd { color: var(--text-muted); }
 @media (max-width: 900px) {
-  .ko-round { min-width: 110px; }
-  .ko-final-col { min-width: 140px; }
+  .ko-round { min-width: 240px; }
+  .ko-final-col { min-width: 200px; }
   .ko-trophy-inner { width: 90px; }
   .ko-round-header { font-size: 7px; letter-spacing: 0.8px; }
-  .partido-team { font-size: 10px; }
-  .partido-score { font-size: 16px; }
+  .ko-round-matches .partido-team { font-size: 13px; }
+  .ko-round-matches .partido-team .champ-pick-flag { width: 52px; }
+  .ko-round-matches .partido-team .flag-tbd { width: 52px; font-size: 18px; }
+  .partido-score { font-size: 20px; }
 }
-.ko-round-matches .partido-card { cursor: pointer; min-width: 200px; }
+.ko-round-matches .partido-card { cursor: pointer; min-width: 280px; padding: 20px 24px; }
 /* toggle buttons in knockout section — highlight purple on hover like the site accent */
 #btnToggleGroupStage:hover, #btnBackToBracket:hover { border-color: var(--vibe-purple); color: var(--vibe-purple); box-shadow: 0 4px 20px rgba(155,48,255,0.25); }
 

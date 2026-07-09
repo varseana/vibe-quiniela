@@ -367,15 +367,20 @@ async function loadPartidos() {
     allPartidos = all.filter(p => koFases.indexOf(p.fase) === -1);
     await loadUserPredictions();
     renderPartidos(getFilteredPartidos());
-    // render R32 finalizados en el history toggle
+    // render R32 + R16 finalizados en el history toggle
     var r32Grid = document.getElementById('r32Grid');
     if (r32Grid) {
       var r32Matches = all.filter(p => p.fase === 'Round of 32' && p.status === 'finalizado');
+      var r16Matches = all.filter(p => p.fase === 'Round of 16' && p.status === 'finalizado');
 
       var html = '';
       if (r32Matches.length > 0) {
         html += '<div class="phase-divider"><span class="phase-badge phase-badge--r32">Round of 32</span></div>';
         html += '<div class="partidos-grid">' + r32Matches.map(p => renderHistoryCard(p, 'r32')).join('') + '</div>';
+      }
+      if (r16Matches.length > 0) {
+        html += '<div class="phase-divider"><span class="phase-badge phase-badge--r16">Round of 16</span></div>';
+        html += '<div class="partidos-grid">' + r16Matches.map(p => renderHistoryCard(p, 'r16')).join('') + '</div>';
       }
 
       if (html) {
@@ -548,14 +553,13 @@ startChampionCountdown(); startTriviaCountdown(); populateTeams(); setLang(lang)
 // ⁘[ KNOCKOUT BRACKET ]⁘
 // lee getPartidos y filtra por fase para construir el bracket dinamicamente
 // el array ROUND_ORDER mapea fase → columna del bracket (left o right del trophy)
+// R16 y anteriores se archivan en "Past Predictions"; el bracket visible arranca en Quarter-Finals
 var KO_ROUND_ORDER = [
-  { key: 'r16l', label: 'Round of 16', fase: 'Round of 16', side: 'left', slots: 4 },
   { key: 'qfl',  label: 'Quarter-Finals', fase: 'Quarter-Finals', side: 'left', slots: 2 },
   { key: 'semil', label: 'Semi-Finals', fase: 'Semi-Finals', side: 'left', slots: 1 },
   { key: 'final', label: 'Final', fase: 'Final', side: 'center', slots: 1 },
   { key: 'semir', label: 'Semi-Finals', fase: 'Semi-Finals', side: 'right', slots: 1 },
-  { key: 'qfr',  label: 'Quarter-Finals', fase: 'Quarter-Finals', side: 'right', slots: 2 },
-  { key: 'r16r', label: 'Round of 16', fase: 'Round of 16', side: 'right', slots: 4 }
+  { key: 'qfr',  label: 'Quarter-Finals', fase: 'Quarter-Finals', side: 'right', slots: 2 }
 ];
 var koPredictions = {};
 
@@ -640,6 +644,14 @@ function renderKnockout(partidos) {
   });
 }
 
+// slot de equipo para cartas KO: bandera real + nombre, o bandera "?" + TBD si aun no clasifica
+function koTeamSlot(team) {
+  if (team && team.trim()) {
+    return '<div class="partido-team">' + flagImg(team) + '<div class="partido-team-name">' + esc(team) + '</div></div>';
+  }
+  return '<div class="partido-team"><div class="champ-pick-flag flag-tbd">?</div><div class="partido-team-name partido-team-name--tbd">TBD</div></div>';
+}
+
 function buildKoCard(p, roundLabel) {
   // 4 estados:
   // 1. sin datos (p null o ambos equipos vacios) → "Coming Soon" minimal
@@ -668,14 +680,16 @@ function buildKoCard(p, roundLabel) {
     return card;
   }
 
-  // estado 2: parcial ~ un equipo clasificado, el otro TBD
+  // estado 2: parcial ~ un equipo clasificado, el otro TBD (bandera real vs bandera "?")
   if (!hasTeams && !isFinished) {
     card.className = 'glass-card partido-card partido-card--locked';
-    var teamA = hasLocal ? esc(p.local) : 'TBD';
-    var teamB = hasVisitante ? esc(p.visitante) : 'TBD';
     card.innerHTML = bonusBar +
       '<div class="partido-header"><span class="partido-fase">' + esc(fase) + '</span></div>' +
-      '<div class="partido-teams"><div class="partido-team">' + teamA + '</div><div class="partido-vs">vs</div><div class="partido-team">' + teamB + '</div></div>' +
+      '<div class="partido-teams">' +
+        koTeamSlot(hasLocal ? p.local : null) +
+        '<div class="partido-vs">vs</div>' +
+        koTeamSlot(hasVisitante ? p.visitante : null) +
+      '</div>' +
       (p.fecha ? '<div class="partido-date">' + formatFecha(p.fecha) + ' - ' + formatHora(p.hora) + '</div>' : '') +
       '<div class="partido-bet partido-bet--waiting">Waiting for teams</div>';
     return card;
@@ -722,9 +736,9 @@ function buildKoCard(p, roundLabel) {
   else statusBadge = '<span class="partido-status pendiente">Score Pending</span>';
 
   var teamsRow = '<div class="partido-teams">' +
-    '<div class="partido-team">' + esc(p.local) + '</div>' +
+    '<div class="partido-team">' + flagImg(p.local) + '<div class="partido-team-name">' + esc(p.local) + '</div></div>' +
     (isFinished ? '<div class="partido-score">' + p.gol_local + ' - ' + p.gol_visitante + '</div>' : '<div class="partido-vs">vs</div>') +
-    '<div class="partido-team">' + esc(p.visitante) + '</div>' +
+    '<div class="partido-team">' + flagImg(p.visitante) + '<div class="partido-team-name">' + esc(p.visitante) + '</div></div>' +
     '</div>';
 
   var dateStr = formatFecha(p.fecha) + ' - ' + formatHora(p.hora);
