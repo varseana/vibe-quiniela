@@ -41,6 +41,8 @@ const T = {
     btn_logout:'Logout', btn_change_pw:'Change Password', your_pick:'Your pick:', no_pick:'No pick yet', saved:'Saved!', sending:'Sending...', registering:'Registering...', registered:'Registered!', conn_err:'Connection error', logging_in:'Logging in...', logged_in:'Welcome back!', your_pred:'Your prediction',
     chg_pw_title:'Change Password', chg_pw_current:'Current Password', chg_pw_new:'New Password', chg_pw_confirm:'Confirm New Password', chg_pw_submit:'Change', pw_changed:'Password changed!',
     prizes_title:'Prizes', prize_1st:'1st Place', prize_2nd:'2nd Place', prize_3rd:'3rd Place', prize_raffle:'Raffle', prize_raffle_desc:'all participants',
+    trivia_badge:'Trivia Challenge', trivia_title:'Think you know the World Cup?', trivia_desc:'Test your knowledge and earn your spot to watch the semifinals & final. 3 winners get 2 hours of NPT each to catch the games live.',
+    trivia_perk1:'3 winners', trivia_perk2:'2h NPT each', trivia_perk3:'Semis & Final', trivia_closes:'Closes in', trivia_deadline:'Deadline: July 12, 2026', trivia_cta:'Take the Trivia',
   },
   es: {
     nav_home:'Inicio', nav_champion:'Bonus', nav_matches:'Partidos', nav_rules:'Reglas', nav_register:'Registrarse', nav_login:'Ingresar',
@@ -67,6 +69,8 @@ const T = {
     btn_logout:'Salir', btn_change_pw:'Cambiar Contrasena', your_pick:'Tu eleccion:', no_pick:'Sin eleccion aun', saved:'Guardado!', sending:'Enviando...', registering:'Registrando...', registered:'Registrado!', conn_err:'Error de conexion', logging_in:'Ingresando...', logged_in:'Bienvenido!', your_pred:'Tu prediccion',
     chg_pw_title:'Cambiar Contrasena', chg_pw_current:'Contrasena Actual', chg_pw_new:'Nueva Contrasena', chg_pw_confirm:'Confirmar Nueva', chg_pw_submit:'Cambiar', pw_changed:'Contrasena cambiada!',
     prizes_title:'Premios', prize_1st:'1er Lugar', prize_2nd:'2do Lugar', prize_3rd:'3er Lugar', prize_raffle:'Rifa', prize_raffle_desc:'todos los participantes',
+    trivia_badge:'Reto de Trivia', trivia_title:'Crees que sabes del Mundial?', trivia_desc:'Pon a prueba tu conocimiento y ganate tu lugar para ver las semifinales y la final. 3 ganadores reciben 2 horas de NPT cada uno para ver los partidos en vivo.',
+    trivia_perk1:'3 ganadores', trivia_perk2:'2h NPT c/u', trivia_perk3:'Semis y Final', trivia_closes:'Cierra en', trivia_deadline:'Fecha limite: 12 de Julio, 2026', trivia_cta:'Hacer la Trivia',
   }
 };
 
@@ -143,6 +147,22 @@ function startChampionCountdown() {
       (d > 0 ? d + 'd ' : '') + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + '</span>';
   }
   tick(); setInterval(tick, 1000);
+}
+
+// trivia challenge deadline countdown (July 12, 2026 23:59 CST)
+function startTriviaCountdown() {
+  const el = document.getElementById('triviaCountdown');
+  if (!el) return;
+  const target = new Date('2026-07-12T23:59:00-06:00');
+  function tick() {
+    const diff = Math.max(0, target - new Date());
+    if (diff === 0) { el.textContent = lang === 'es' ? 'Cerrado' : 'Closed'; return; }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    el.textContent = d + 'd ' + h + 'h ' + m + 'm';
+  }
+  tick(); setInterval(tick, 60000);
 }
 
 // modals
@@ -522,7 +542,7 @@ backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 's
 setInterval(() => { if (allPartidos.length) renderPartidos(getFilteredPartidos()); }, 60000);
 
 // init
-startChampionCountdown(); populateTeams(); setLang(lang); updateUserUI(); updateChampionUI(); loadPartidos(); loadLeaderboard(); loadKnockout();
+startChampionCountdown(); startTriviaCountdown(); populateTeams(); setLang(lang); updateUserUI(); updateChampionUI(); loadPartidos(); loadLeaderboard(); loadKnockout();
 
 // ⁘[ KNOCKOUT BRACKET ]⁘
 // lee getPartidos y filtra por fase para construir el bracket dinamicamente
