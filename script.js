@@ -644,6 +644,16 @@ function renderKnockout(partidos) {
   });
 }
 
+// muestra un skeleton en la carta recien apostada mientras loadKnockout() trae la data del backend
+function showCardSkeleton(partidoId) {
+  var card = document.querySelector('[data-pid="' + partidoId + '"]');
+  if (!card) return;
+  var existing = card.querySelector('.partido-prediction');
+  var skel = '<div class="partido-prediction pred-skeleton"><span class="pred-skeleton-bar"></span></div>';
+  if (existing) { existing.outerHTML = skel; }
+  else { card.insertAdjacentHTML('beforeend', skel); }
+}
+
 // slot de equipo para cartas KO: bandera real + nombre, o bandera "?" + TBD si aun no clasifica
 function koTeamSlot(team) {
   if (team && team.trim()) {
@@ -670,6 +680,7 @@ function buildKoCard(p, roundLabel) {
   var bonusBar = isBonus ? '<div class="partido-bonus-bar">Bonus</div>' : '';
 
   var card = document.createElement('div');
+  if (p && p.partido_id) card.setAttribute('data-pid', p.partido_id);
 
   // estado 1: sin datos ~ coming soon
   if (!hasPartial) {
@@ -793,7 +804,7 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
     if (res.error) { msg.textContent = res.error; msg.className = 'form-msg error'; return; }
     koPredictions[partidoId] = { gol_local: golL, gol_visitante: golV };
     msg.textContent = t('saved'); msg.className = 'form-msg success';
-    setTimeout(() => { closePredict(); loadKnockout(); }, 800);
+    setTimeout(() => { closePredict(); showCardSkeleton(partidoId); loadKnockout(); }, 800);
   } catch { msg.textContent = t('conn_err'); msg.className = 'form-msg error'; }
 });
 

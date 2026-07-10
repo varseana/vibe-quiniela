@@ -143,6 +143,10 @@ body {
 .partido-score { font-family: var(--font-display); font-size: 24px; font-weight: 700; text-align: center; color: var(--vibe-purple); }
 .partido-date { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: var(--sp-3); }
 .partido-prediction { text-align: center; font-size: 11px; color: var(--vibe-magenta); margin-top: var(--sp-2); }
+/* skeleton mientras la prediccion recien guardada se recarga del backend */
+.pred-skeleton { display: flex; justify-content: center; }
+.pred-skeleton-bar { display: inline-block; width: 130px; height: 14px; border-radius: 6px; background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(200,80,192,0.18) 37%, rgba(255,255,255,0.05) 63%); background-size: 400% 100%; animation: predShimmer 1.2s ease infinite; }
+@keyframes predShimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 .partido-card--locked { opacity: 0.7; cursor: default; }
 .partido-card--locked:hover { transform: none; box-shadow: none; }
 .partido-bet { text-align: center; font-size: 10px; font-weight: 600; margin-top: var(--sp-2); text-transform: uppercase; letter-spacing: 0.5px; }
