@@ -367,21 +367,30 @@ async function loadPartidos() {
     allPartidos = all.filter(p => koFases.indexOf(p.fase) === -1);
     await loadUserPredictions();
     renderPartidos(getFilteredPartidos());
-    // render R32 + R16 finalizados en el history toggle
+    // render KO finalizados en el history toggle ~ de mas reciente a mas antiguo:
+    // Semi-Finals → Quarter-Finals → Round of 16 → Round of 32 (Group Stage va aparte, abajo)
     var r32Grid = document.getElementById('r32Grid');
     if (r32Grid) {
-      var r32Matches = all.filter(p => p.fase === 'Round of 32' && p.status === 'finalizado');
-      var r16Matches = all.filter(p => p.fase === 'Round of 16' && p.status === 'finalizado');
+      // SF y QF SOLO se archivan cuando el Final Mode toma efecto (Final con ambos equipos):
+      // hasta entonces siguen visibles en el bracket y no deben duplicarse aqui.
+      var finalM = all.filter(p => p.fase === 'Final')[0];
+      var finalMode = finalM && finalM.local && finalM.local.trim() && finalM.visitante && finalM.visitante.trim();
+      var archivedRounds = [];
+      if (finalMode) {
+        archivedRounds.push({ fase: 'Semi-Finals',    badge: 'phase-badge--sf', cls: 'sf' });
+        archivedRounds.push({ fase: 'Quarter-Finals', badge: 'phase-badge--qf', cls: 'qf' });
+      }
+      archivedRounds.push({ fase: 'Round of 16', badge: 'phase-badge--r16', cls: 'r16' });
+      archivedRounds.push({ fase: 'Round of 32', badge: 'phase-badge--r32', cls: 'r32' });
 
       var html = '';
-      if (r32Matches.length > 0) {
-        html += '<div class="phase-divider"><span class="phase-badge phase-badge--r32">Round of 32</span></div>';
-        html += '<div class="partidos-grid">' + r32Matches.map(p => renderHistoryCard(p, 'r32')).join('') + '</div>';
-      }
-      if (r16Matches.length > 0) {
-        html += '<div class="phase-divider"><span class="phase-badge phase-badge--r16">Round of 16</span></div>';
-        html += '<div class="partidos-grid">' + r16Matches.map(p => renderHistoryCard(p, 'r16')).join('') + '</div>';
-      }
+      archivedRounds.forEach(function(r) {
+        var matches = all.filter(p => p.fase === r.fase && p.status === 'finalizado');
+        if (matches.length > 0) {
+          html += '<div class="phase-divider"><span class="phase-badge ' + r.badge + '">' + r.fase + '</span></div>';
+          html += '<div class="partidos-grid">' + matches.map(p => renderHistoryCard(p, r.cls)).join('') + '</div>';
+        }
+      });
 
       if (html) {
         r32Grid.innerHTML = html;
@@ -587,10 +596,97 @@ async function loadKnockout() {
   renderKnockout(partidos);
 }
 
+// bandera grande para el Final Mode (w320 vs w80 normal)
+function flagUrlBig(team) { var c = FLAG_CODES[team]; return c ? ('https://flagcdn.com/w320/' + c + '.png') : ''; }
+
+// icono trofeo outline (estilo trivia) ~ usado en el banner de campeon del Final Mode
+function icoTrophy() {
+  return '<svg class="ln-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
+}
+
+// ⁘[ FINAL MODE ]⁘ card gigante ~ se activa cuando la fila Final tiene AMBOS equipos
+function renderFinalMode(finalMatch, thirdMatch) {
+  var grid = document.getElementById('bracketGrid');
+  var f = finalMatch;
+  var isFinished = f.status === 'finalizado' && f.gol_local !== '' && f.gol_visitante !== '';
+  var rL = Number(f.gol_local), rV = Number(f.gol_visitante);
+  var winL = isFinished && rL > rV, winV = isFinished && rV > rL;
+
+  // confeti dorado en hover (detras de todo)
+  var goldConf = '<div class="gold-confetti-wrap" aria-hidden="true">';
+  for (var i = 0; i < 24; i++) {
+    goldConf += '<div class="gold-confetti" style="left:' + (i * 4.1 + (i % 3)) + '%;animation-duration:' + (1.6 + (i % 4) * 0.4) + 's;animation-delay:' + ((i % 6) * 0.3) + 's"></div>';
+  }
+  goldConf += '</div>';
+  // confeti de celebracion (solo al terminar)
+  var winConf = '';
+  if (isFinished) {
+    var cols = ['#9b30ff','#c850c0','#ff6ec7','#fbbf24','#22c55e'];
+    winConf = '<div class="confetti-wrap" aria-hidden="true">';
+    for (var j = 0; j < 40; j++) {
+      winConf += '<div class="confetti" style="left:' + (j * 2.5) + '%;background:' + cols[j % cols.length] + ';animation-duration:' + (2.5 + (j % 5) * 0.5) + 's;animation-delay:' + ((j % 6) * 0.5) + 's"></div>';
+    }
+    winConf += '</div>';
+  }
+
+  var scoreBlock = isFinished
+    ? '<div class="final-vs-score"><div class="final-score">' + f.gol_local + '</div><span class="final-vs-dash">-</span><div class="final-score">' + f.gol_visitante + '</div></div>'
+    : '<div class="final-vs-score"><span class="final-vs-dash" style="font-size:28px">VS</span></div>';
+
+  // linea de prediccion + puntos
+  var pred = koPredictions[f.partido_id];
+  var predLine = '';
+  if (pred) {
+    var ptsBadge = '';
+    if (isFinished) {
+      var pL = Number(pred.gol_local), pV = Number(pred.gol_visitante);
+      if (pL === rL && pV === rV) ptsBadge = ' <span class="final-pts final-pts--5">+5 Exact!</span>';
+      else { var realW = rL>rV?'L':rL<rV?'V':'E', predW = pL>pV?'L':pL<pV?'V':'E'; ptsBadge = predW===realW ? ' <span class="final-pts final-pts--2">+2 Winner</span>' : ' <span class="final-pts final-pts--0">No points</span>'; }
+    }
+    predLine = '<div class="final-pred-line">Your prediction: ' + pred.gol_local + ' - ' + pred.gol_visitante + ptsBadge + '</div>';
+  }
+
+  var footer = isFinished
+    ? '<div class="final-winner-banner">' + icoTrophy() + esc(winL ? f.local : f.visitante) + ', World Champion</div>'
+    : '<div class="final-hint">Tap the card to predict</div>';
+
+  var clickable = !isFinished;
+  var hero = document.createElement('div');
+  hero.className = 'final-hero';
+  hero.innerHTML = winConf + goldConf +
+    '<span class="final-badge-top">The Grand Final</span>' +
+    '<div class="final-side' + (winL ? ' winner' : '') + '"><img class="final-flag" src="' + flagUrlBig(f.local) + '" alt="' + esc(f.local) + '"><div class="final-country">' + esc(f.local) + '</div></div>' +
+    '<div class="final-center"><img src="trophy.png" class="final-trophy" alt="Trophy">' + scoreBlock + '<div class="final-label-champs">World Champions</div></div>' +
+    '<div class="final-side' + (winV ? ' winner' : '') + '"><img class="final-flag" src="' + flagUrlBig(f.visitante) + '" alt="' + esc(f.visitante) + '"><div class="final-country">' + esc(f.visitante) + '</div></div>' +
+    predLine + footer;
+  if (clickable) { hero.style.cursor = 'pointer'; hero.addEventListener('click', function() { openKoPredict(f); }); }
+
+  var wrap = document.createElement('div');
+  wrap.className = 'final-mode-wrap';
+  wrap.appendChild(hero);
+
+  // tercer lugar (bonus) debajo de la Final gigante
+  var thirdCard = buildKoCard(thirdMatch, 'Third Place');
+  thirdCard.classList.add('ko-third-place');
+  var bonusWrap = document.createElement('div');
+  bonusWrap.className = 'final-bonus';
+  bonusWrap.appendChild(thirdCard);
+  wrap.appendChild(bonusWrap);
+
+  grid.appendChild(wrap);
+}
+
 function renderKnockout(partidos) {
   var grid = document.getElementById('bracketGrid');
   if (!grid) return;
   grid.innerHTML = '';
+
+  // ⁘[ FINAL MODE ]⁘ si la fila Final ya tiene AMBOS equipos → bracket colapsa a la card gigante
+  var finalMatch = partidos.filter(function(p) { return p.fase === 'Final'; })[0] || null;
+  var thirdMatch = partidos.filter(function(p) { return p.fase === 'Third Place'; })[0] || null;
+  var finalReady = finalMatch && finalMatch.local && finalMatch.local.trim() && finalMatch.visitante && finalMatch.visitante.trim();
+  grid.classList.toggle('final-mode-active', !!finalReady);
+  if (finalReady) { renderFinalMode(finalMatch, thirdMatch); return; }
 
   // index partidos by fase + side for lookup
   // side stored as 'left_side' column: 'yes'=left, 'no'=right, 'center'=final
@@ -609,7 +705,11 @@ function renderKnockout(partidos) {
     col.appendChild(header);
 
     if (round.side === 'center') {
-      // trophy + label, no match cards
+      // card pequena de la Final ~ ENCIMA del trofeo (coming soon / parcial hasta que haya 2 equipos)
+      var finalCard = buildKoCard(finalMatch, 'Final');
+      finalCard.classList.add('ko-final-match');
+      col.appendChild(finalCard);
+      // trophy + label
       var trophy = document.createElement('img');
       trophy.src = 'trophy.png'; trophy.alt = 'Trophy'; trophy.className = 'ko-trophy-inner';
       col.appendChild(trophy);
@@ -617,7 +717,6 @@ function renderKnockout(partidos) {
       lbl.className = 'ko-final-label'; lbl.textContent = 'WORLD CHAMPIONS';
       col.appendChild(lbl);
       // tercer lugar (bonus) ~ debajo del trofeo, offset hacia abajo
-      var thirdMatch = partidos.filter(function(p) { return p.fase === 'Third Place'; })[0] || null;
       var thirdCard = buildKoCard(thirdMatch, 'Third Place');
       thirdCard.classList.add('ko-third-place');
       col.appendChild(thirdCard);
@@ -675,16 +774,18 @@ function buildKoCard(p, roundLabel) {
   var hasPartial = hasLocal || hasVisitante;
   var isFinished = p && p.status === 'finalizado';
   var fase = roundLabel || (p ? p.fase : 'Round of 32');
-  // barra BONUS edge-to-edge para el partido de tercer lugar
+  // barra edge-to-edge: BONUS (tercer lugar) o LA GRAN FINAL (final)
   var isBonus = fase === 'Third Place';
-  var bonusBar = isBonus ? '<div class="partido-bonus-bar">Bonus</div>' : '';
+  var isFinal = fase === 'Final';
+  var bonusBar = isBonus ? '<div class="partido-bonus-bar">Bonus</div>'
+               : isFinal ? '<div class="partido-final-bar">La Gran Final</div>' : '';
 
   var card = document.createElement('div');
   if (p && p.partido_id) card.setAttribute('data-pid', p.partido_id);
 
   // estado 1: sin datos ~ coming soon
   if (!hasPartial) {
-    card.className = 'glass-card partido-card partido-card--locked ko-coming-soon' + (isBonus ? ' partido-card--coming' : '');
+    card.className = 'glass-card partido-card partido-card--locked ko-coming-soon' + (isBonus || isFinal ? ' partido-card--coming' : '');
     card.innerHTML = bonusBar +
       '<div class="partido-header"><span class="partido-fase">' + esc(fase) + '</span></div>' +
       '<div class="ko-coming-label">Coming Soon</div>';
