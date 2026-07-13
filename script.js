@@ -23,6 +23,8 @@ const T = {
     champ_badge:'Extra', champ_title:'Bonus Points', champ_desc:'Two extra ways to rack up points before and during the tournament.',
     champ_card_tag:'Bonus', champ_card_title:'World Cup Champion', champ_card_desc:'Worth 10 bonus points. Locks June 24.',
     champ_save:'Save Pick', champ_locked:'Prediction for champ is locked.', champ_no_pick_locked:'You did not pick a winner on time :(', you_picked:'You picked:',
+    champ_alive:'Still alive', champ_out:'Eliminated', champ_won:'World Champion!',
+    round_r32:'Round of 32', round_r16:'Round of 16', round_qf:'Quarter-Finals', round_sf:'Semi-Finals', round_final:'Final', round_groups:'Group stage',
     bonus_info_tag:'Bonus', bonus_info_title:'Third Place Playoff', bonus_info_desc:'Predict the third-place match too, right under the trophy in the bracket. Same scoring: +5 for an exact score, +2 for the correct winner.',
     match_badge:'Matches', match_title:'Group Stage', filter_all:'All', filter_pending:'Pending', filter_done:'Finished', loading:'Loading...',
     lb_title:'Standings', lb_player:'Player', lb_exact:'Exact', lb_correct:'Correct', lb_champ:'Champ', lb_pts:'Points',
@@ -51,6 +53,8 @@ const T = {
     champ_badge:'Extra', champ_title:'Puntos Bonus', champ_desc:'Dos formas extra de sumar puntos antes y durante el torneo.',
     champ_card_tag:'Bonus', champ_card_title:'Campeon del Mundial', champ_card_desc:'Vale 10 puntos bonus. Se bloquea el 24 de Junio.',
     champ_save:'Guardar', champ_locked:'La prediccion de campeon esta bloqueada.', champ_no_pick_locked:'No elegiste un campeon a tiempo :(', you_picked:'Elegiste:',
+    champ_alive:'Sigue vivo', champ_out:'Eliminado', champ_won:'Campeon del Mundo!',
+    round_r32:'Ronda de 32', round_r16:'Octavos', round_qf:'Cuartos de final', round_sf:'Semifinales', round_final:'Final', round_groups:'Fase de grupos',
     bonus_info_tag:'Bonus', bonus_info_title:'Partido por el Tercer Lugar', bonus_info_desc:'Predice tambien el partido por el tercer lugar, justo debajo del trofeo en el bracket. Mismo puntaje: +5 por marcador exacto, +2 por acertar al ganador.',
     match_badge:'Partidos', match_title:'Fase de Grupos', filter_all:'Todos', filter_pending:'Pendientes', filter_done:'Finalizados', loading:'Cargando...',
     lb_title:'Tabla de Posiciones', lb_player:'Jugador', lb_exact:'Exactos', lb_correct:'Aciertos', lb_champ:'Campeon', lb_pts:'Puntos',
@@ -291,20 +295,110 @@ function updateChampionUI() {
   if (!u) { document.getElementById('championCurrent').textContent = ''; return; }
   loadChampion();
 }
+// ⁘[ CHAMPION STATUS ]⁘ deriva vivo/eliminado/campeon del equipo desde los partidos KO
+// orden de rondas KO de mas temprana a mas tardia (para saber "hasta donde llego")
+var KO_STATUS_ORDER = [
+  { fase: 'Round of 32',    key: 'round_r32'   },
+  { fase: 'Round of 16',    key: 'round_r16'   },
+  { fase: 'Quarter-Finals', key: 'round_qf'    },
+  { fase: 'Semi-Finals',    key: 'round_sf'    },
+  { fase: 'Final',          key: 'round_final' }
+];
+// devuelve { state:'alive'|'out'|'won', roundKey } o null si no hay datos suficientes
+// Regla por FRONTERA: el torneo avanza por rondas. La "ronda actual" es la mas
+// avanzada que ya tiene equipos asignados. Un equipo sigue vivo SOLO si llega a esa
+// frontera; si su participacion se quedo en una ronda anterior, esta eliminado
+// (aunque haya ganado ese ultimo partido) porque el torneo ya avanzo sin el.
+function computeChampionStatus(team, partidos) {
+  if (!team || !partidos || !partidos.length) return null;
+  function roundIdx(fase) { return KO_STATUS_ORDER.map(function(r){ return r.fase; }).indexOf(fase); }
+  function hasTeam(p) { return (p.local && p.local === team) || (p.visitante && p.visitante === team); }
+  function isDone(p) { return p.status === 'finalizado' && p.gol_local !== '' && p.gol_visitante !== ''; }
+
+  // 1) ¿ya hay campeon? Final finalizada.
+  var finalP = partidos.filter(function(p){ return p.fase === 'Final'; })[0];
+  if (finalP && isDone(finalP)) {
+    var frL = Number(finalP.gol_local), frV = Number(finalP.gol_visitante);
+    var winner = frL > frV ? finalP.local : finalP.visitante;
+    if (winner === team) return { state: 'won', roundKey: 'round_final' };
+    // perdio la final (o ni jugo) -> eliminado
+    if (hasTeam(finalP)) return { state: 'out', roundKey: 'round_final' };
+    return { state: 'out', roundKey: 'round_groups' };
+  }
+
+  // 2) frontera = ronda mas avanzada que YA tiene equipos asignados (torneo actual)
+  var frontierIdx = -1;
+  KO_STATUS_ORDER.forEach(function(r, i) {
+    var anyTeams = partidos.some(function(p){ return p.fase === r.fase && ((p.local && p.local.trim()) || (p.visitante && p.visitante.trim())); });
+    if (anyTeams) frontierIdx = i;
+  });
+  if (frontierIdx === -1) return { state: 'out', roundKey: 'round_groups' }; // aun sin KO
+
+  // 3) partidos del equipo en la ronda-frontera
+  var frontierFase = KO_STATUS_ORDER[frontierIdx].fase;
+  var atFrontier = partidos.filter(function(p){ return p.fase === frontierFase && hasTeam(p); });
+
+  if (atFrontier.length) {
+    // aparece en la ronda actual: vivo salvo que ya perdio ahi
+    var lost = atFrontier.some(function(p) {
+      if (!isDone(p)) return false;
+      var rL = Number(p.gol_local), rV = Number(p.gol_visitante);
+      var teamGoals = p.local === team ? rL : rV, oppGoals = p.local === team ? rV : rL;
+      return teamGoals < oppGoals;
+    });
+    return lost
+      ? { state: 'out', roundKey: KO_STATUS_ORDER[frontierIdx].key }
+      : { state: 'alive', roundKey: KO_STATUS_ORDER[frontierIdx].key };
+  }
+
+  // 4) NO aparece en la ronda actual -> el torneo avanzo sin el -> eliminado
+  //    (no importa si gano su ultimo partido en una ronda anterior)
+  var everInKo = partidos.some(function(p){ return roundIdx(p.fase) !== -1 && hasTeam(p); });
+  return { state: 'out', roundKey: everInKo ? null : 'round_groups' };
+}
+
+// iconos outline (huecos, estilo trivia) para el estado del campeon
+function icoAlive() { return '<svg class="ln-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>'; }
+function icoOut()   { return '<svg class="ln-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>'; }
+
+// pinta el chip de estado bajo la bandera del campeon
+function renderChampionStatus(team) {
+  var el = document.getElementById('championStatus');
+  if (!el) return;
+  var st = computeChampionStatus(team, allKoPartidos);
+  if (!st) { el.innerHTML = ''; return; }
+  if (st.state === 'alive') {
+    // sigue vivo ~ muestra la ronda que juega
+    el.innerHTML = '<div class="champ-status champ-status--alive">' + icoAlive() + t('champ_alive') + ' <span class="champ-status__sub">· ' + t(st.roundKey) + '</span></div>';
+  } else if (st.state === 'out') {
+    // eliminado ~ sin ronda (simple; cubre tambien "afuera en grupos")
+    el.innerHTML = '<div class="champ-status champ-status--out">' + icoOut() + t('champ_out') + '</div>';
+  } else if (st.state === 'won') {
+    el.innerHTML = '<div class="champ-status champ-status--won">' + icoTrophy() + t('champ_won') + ' <span class="champ-status__sub">+10 pts</span></div>';
+  }
+}
+
+var championTeam = null; // equipo elegido, cacheado para re-render en polling / cambio de idioma
 async function loadChampion() {
   const u = getUser(); if (!u) return;
   try {
     const res = await apiGet('getChampion', { pid: u.id });
+    championTeam = res.equipo || null;
     const cur = document.getElementById('championCurrent');
+    const statusEl = document.getElementById('championStatus');
     if (res.equipo) {
       cur.innerHTML = isLocked()
         ? `<span class="champ-pick-country"><strong>${res.equipo}</strong>${flagImg(res.equipo)}</span>`
         : `${t('your_pick')} <strong>${res.equipo}</strong>`;
       document.getElementById('championSelect').value = res.equipo;
+      // estado vivo/eliminado solo cuando el pick esta bloqueado (torneo en marcha)
+      if (isLocked()) renderChampionStatus(res.equipo);
+      else if (statusEl) statusEl.innerHTML = '';
     } else {
       cur.innerHTML = isLocked()
         ? `<span class="champ-pick-country champ-pick-country--none"><strong>${t('champ_no_pick_locked')}</strong></span>`
         : t('no_pick');
+      if (statusEl) statusEl.innerHTML = ''; // sin pick -> sin estado
     }
   } catch {}
 }
@@ -556,6 +650,9 @@ backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 's
 // refresh betting status every 60s
 setInterval(() => { if (allPartidos.length) renderPartidos(getFilteredPartidos()); }, 60000);
 
+// live refresh del bracket + estado del campeon (vivo/eliminado) cada 2 min mientras el torneo corre
+setInterval(() => { if (isLocked()) loadKnockout(); }, 120000);
+
 // init
 startChampionCountdown(); populateTeams(); setLang(lang); updateUserUI(); updateChampionUI(); loadPartidos(); loadLeaderboard(); loadKnockout();
 
@@ -571,6 +668,7 @@ var KO_ROUND_ORDER = [
   { key: 'qfr',  label: 'Quarter-Finals', fase: 'Quarter-Finals', side: 'right', slots: 2 }
 ];
 var koPredictions = {};
+var allKoPartidos = []; // partidos KO cacheados (para el estado del campeon)
 
 async function loadKnockout() {
   var u = getUser();
@@ -590,10 +688,13 @@ async function loadKnockout() {
     var all = await apiGet('getPartidos');
     var koFases = ['Round of 32','Round of 16','Quarter-Finals','Semi-Finals','Third Place','Final'];
     partidos = all.filter(function(p) { return koFases.indexOf(p.fase) !== -1; });
+    allKoPartidos = partidos; // cache para el estado del campeon
   } catch(e) {}
 
   // siempre re-renderizar con los datos que tengamos ([] muestra TBD, con datos muestra equipos)
   renderKnockout(partidos);
+  // refrescar el estado del campeon (vivo/eliminado) con los partidos recien cargados
+  if (championTeam && isLocked()) renderChampionStatus(championTeam);
 }
 
 // bandera grande para el Final Mode (w320 vs w80 normal)

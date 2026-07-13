@@ -355,6 +355,16 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .champion-select:disabled { opacity: 0.4; cursor: not-allowed; }
 .champion-current { font-size: 15px; color: var(--text-secondary); }
 .champion-current strong { color: var(--vibe-purple); font-weight: 700; font-size: 18px; }
+/* chip de estado del campeon (vivo / eliminado / campeon) ~ iconos outline huecos */
+.champion-status:empty { display: none; }
+.champ-status { display: inline-flex; align-items: center; gap: 7px; margin-top: var(--sp-2); padding: 7px 16px; border-radius: 50px;
+  font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: .5px; }
+.champ-status .ln-ico { width: 15px; height: 15px; }
+.champ-status__sub { opacity: .75; font-weight: 600; }
+.champ-status--alive { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.35); color: #22c55e; }
+.champ-status--out { background: rgba(248,113,113,0.10); border: 1px solid rgba(248,113,113,0.32); color: #fb7185; }
+.champ-status--won { background: linear-gradient(135deg, rgba(251,191,36,0.18), rgba(200,80,192,0.18)); border: 1px solid rgba(251,191,36,0.45); color: #fbbf24; }
+.champ-status--won .ln-ico { stroke: #fbbf24; }
 .champion-locked {
   margin-top: auto; padding-top: var(--sp-3);
   font-size: 12px; color: var(--text-muted); letter-spacing: 0.5px;
