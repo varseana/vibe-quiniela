@@ -325,10 +325,6 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .winner-medal svg { width: 22px; height: 22px; }
 .winner-name { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text-primary); letter-spacing: .3px; }
 .winner-row:hover .winner-name { color: #fbbf24; }
-/* flecha apunta HACIA ARRIBA (el gafete sale por arriba); un empujoncito al hover */
-.winner-arrow { margin-left: auto; color: var(--text-muted); display: flex; transition: color .2s var(--ease), transform .28s var(--ease); }
-.winner-arrow svg { width: 15px; height: 15px; }
-.winner-row:hover .winner-arrow { color: #fbbf24; transform: translateY(-3px); }
 /* gafete Phonetool: absoluto, sale deslizando hacia arriba desde el boton, ENCIMA de todo */
 .winner-badge {
   position: absolute; left: 50%; bottom: calc(100% + 8px);
