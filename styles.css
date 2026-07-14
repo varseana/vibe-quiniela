@@ -315,16 +315,20 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .winners-list { display: flex; flex-direction: column; gap: 10px; min-width: 240px; }
 .winner-item { position: relative; }
 .winner-row {
-  display: flex; align-items: center; gap: 12px; position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; z-index: 1;
   background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
-  border-radius: 10px; padding: 10px 14px; text-decoration: none;
+  border-radius: 10px; padding: 10px 16px; text-decoration: none;
   transition: border-color .2s var(--ease), background .2s var(--ease);
 }
 .winner-row:hover { border-color: rgba(251,191,36,0.5); background: rgba(251,191,36,0.06); }
-.winner-medal { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; flex-shrink: 0; color: #fbbf24; }
-.winner-medal svg { width: 22px; height: 22px; }
+.winner-medal { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; color: #fbbf24; }
+.winner-medal svg { width: 20px; height: 20px; }
 .winner-name { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text-primary); letter-spacing: .3px; }
 .winner-row:hover .winner-name { color: #fbbf24; }
+/* flecha apunta HACIA ARRIBA ~ intuicion de que el gafete sale por arriba; empujoncito al hover */
+.winner-arrow { color: var(--text-muted); display: flex; transition: color .2s var(--ease), transform .28s var(--ease); }
+.winner-arrow svg { width: 15px; height: 15px; }
+.winner-row:hover .winner-arrow { color: #fbbf24; transform: translateY(-3px); }
 /* gafete Phonetool: absoluto, sale deslizando hacia arriba desde el boton, ENCIMA de todo */
 .winner-badge {
   position: absolute; left: 50%; bottom: calc(100% + 8px);
