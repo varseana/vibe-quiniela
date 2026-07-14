@@ -45,6 +45,9 @@ const T = {
     prizes_title:'Prizes', prize_1st:'1st Place', prize_2nd:'2nd Place', prize_3rd:'3rd Place', prize_raffle:'Raffle', prize_raffle_desc:'all participants',
     trivia_badge:'Trivia Challenge', trivia_title:'Think you know the World Cup?', trivia_desc:'Test your knowledge and earn your spot to watch the semifinals <strong>or</strong> final. 3 winners get 2 hours of NPT each to catch the games live.',
     trivia_perk1:'3 winners', trivia_perk2:'2h NPT each', trivia_perk3:'Semis or Final', trivia_closes:'Closes in', trivia_deadline:'Deadline: July 12, 2026', trivia_cta:'Take the Trivia',
+    tw_badge:'Trivia Winners', tw_title:'Congratulations to our winners',
+    tw_desc:'These three colleagues stood out for their <strong>accuracy and speed</strong> in the World Cup trivia and earned <strong>2 hours of NPT each</strong> to watch <strong>either the semifinal or the final</strong> live.',
+    tw_perk1:'3 winners', tw_perk2:'2h NPT each',
   },
   es: {
     nav_home:'Inicio', nav_champion:'Bonus', nav_matches:'Partidos', nav_rules:'Reglas', nav_register:'Registrarse', nav_login:'Ingresar',
@@ -75,6 +78,9 @@ const T = {
     prizes_title:'Premios', prize_1st:'1er Lugar', prize_2nd:'2do Lugar', prize_3rd:'3er Lugar', prize_raffle:'Rifa', prize_raffle_desc:'todos los participantes',
     trivia_badge:'Reto de Trivia', trivia_title:'Crees que sabes del Mundial?', trivia_desc:'Pon a prueba tu conocimiento y ganate tu lugar para ver las semifinales <strong>o</strong> la final. 3 ganadores reciben 2 horas de NPT cada uno para ver los partidos en vivo.',
     trivia_perk1:'3 ganadores', trivia_perk2:'2h NPT c/u', trivia_perk3:'Semis o Final', trivia_closes:'Cierra en', trivia_deadline:'Fecha limite: 12 de Julio, 2026', trivia_cta:'Hacer la Trivia',
+    tw_badge:'Ganadores de la Trivia', tw_title:'Felicidades a nuestros ganadores',
+    tw_desc:'Estas tres personas destacaron por su <strong>precision y rapidez</strong> en la trivia del Mundial y ganaron <strong>2 horas de NPT cada una</strong> para ver <strong>la semifinal o la final</strong> en vivo.',
+    tw_perk1:'3 ganadores', tw_perk2:'2h NPT c/u',
   }
 };
 
