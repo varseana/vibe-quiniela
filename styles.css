@@ -621,6 +621,30 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
   .final-hero { padding: 52px 12px 24px; gap: 6px; }
 }
 
+/* ⁘[ FINAL MODE SKELETON ]⁘ silueta de carga (A1) + pill "Saving" en la pred line (B3) */
+.final-hero.fm-skel { pointer-events: none; animation: none; }
+.fm-skel-box { display: block; border-radius: 10px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(200,80,192,0.16) 37%, rgba(255,255,255,0.04) 63%);
+  background-size: 400% 100%; animation: fmShimmer 1.3s ease infinite; }
+@keyframes fmShimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+.fm-skel-badge { background: linear-gradient(90deg, rgba(251,191,36,0.35), rgba(245,158,11,0.55), rgba(251,191,36,0.35)); background-size: 300% 100%; animation: fmShimmer 1.6s ease infinite; }
+.fm-skel-flag { width: 168px; height: 112px; border-radius: 0 20px 0 20px; }
+.fm-skel-country { width: 130px; height: 26px; margin-top: 2px; }
+.fm-skel-trophy { width: 110px; height: 120px; border-radius: 16px; }
+.fm-skel-vs { width: 54px; height: 34px; margin-top: 10px; border-radius: 8px; }
+.fm-skel-champs { width: 90px; height: 10px; margin-top: 16px; border-radius: 5px; }
+.fm-skel-predline { grid-column: 1/-1; width: 200px; height: 15px; margin: 20px auto 0; border-radius: 6px; }
+/* B3: pill "Saving..." con spinner */
+.fp-pill { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 50px;
+  background: rgba(200,80,192,0.12); border: 1px solid rgba(200,80,192,0.25); font-size: 12px; color: var(--vibe-magenta); font-weight: 600; }
+.fp-spin { width: 13px; height: 13px; border-radius: 50%; border: 2px solid rgba(200,80,192,0.3); border-top-color: var(--vibe-magenta); animation: fpSpin .7s linear infinite; }
+@keyframes fpSpin { to { transform: rotate(360deg); } }
+@media (max-width: 640px) {
+  .fm-skel-flag { width: 108px; height: 72px; }
+  .fm-skel-trophy { width: 80px; height: 88px; }
+  .fm-skel-country { width: 90px; }
+}
+
 @keyframes koFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 @keyframes koGlow { 0%,100% { opacity: 0.5; transform: translate(-50%,-60%) scale(1); } 50% { opacity: 1; transform: translate(-50%,-60%) scale(1.15); } }
 

@@ -680,6 +680,10 @@ async function loadKnockout() {
   var u = getUser();
   var partidos = [];
 
+  // si ya sabemos que Final Mode esta activo y aun no hay card en pantalla, mostrar la silueta (evita flash vacio en carga fria)
+  // si ya hay una .final-hero (p.ej. tras guardar, con el pill "Saving"), no la pisamos: dejamos que el re-render la reemplace
+  if (localStorage.getItem('vibeFinalMode') === '1' && !document.querySelector('.final-hero')) showFinalModeSkeleton();
+
   // cargar predicciones del usuario
   if (u) {
     try {
@@ -705,6 +709,37 @@ async function loadKnockout() {
 
 // bandera grande para el Final Mode (w320 vs w80 normal)
 function flagUrlBig(team) { var c = FLAG_CODES[team]; return c ? ('https://flagcdn.com/w320/' + c + '.png') : ''; }
+
+// ⁘[ FINAL MODE SKELETON ]⁘ silueta de carga de la card gigante ~ evita el flash vacio mientras loadKnockout() trae la data
+// (la card gigante no tiene data-pid ni .partido-prediction, asi que showCardSkeleton no aplica aca)
+function showFinalModeSkeleton() {
+  var grid = document.getElementById('bracketGrid');
+  if (!grid) return;
+  grid.classList.add('final-mode-active');
+  grid.innerHTML =
+    '<div class="final-mode-wrap"><div class="final-hero fm-skel">' +
+      '<span class="final-badge-top fm-skel-badge"></span>' +
+      '<div class="final-side"><span class="fm-skel-box fm-skel-flag"></span><span class="fm-skel-box fm-skel-country"></span></div>' +
+      '<div class="final-center"><span class="fm-skel-box fm-skel-trophy"></span><span class="fm-skel-box fm-skel-vs"></span><span class="fm-skel-box fm-skel-champs"></span></div>' +
+      '<div class="final-side"><span class="fm-skel-box fm-skel-flag"></span><span class="fm-skel-box fm-skel-country"></span></div>' +
+      '<span class="fm-skel-box fm-skel-predline"></span>' +
+    '</div></div>';
+}
+
+// pill "Saving..." en la linea Your prediction de la card gigante mientras loadKnockout() re-consulta
+function showFinalPredSaving() {
+  var hero = document.querySelector('.final-hero');
+  if (!hero) return;
+  var pill = '<div class="final-pred-line" id="finalPredLine"><span class="fp-pill"><span class="fp-spin"></span>' + t('sending') + '</span></div>';
+  var line = hero.querySelector('.final-pred-line');
+  if (line) { line.outerHTML = pill; }
+  else {
+    // no habia prediccion previa: insertar antes del hint/footer
+    var hint = hero.querySelector('.final-hint, .final-winner-banner');
+    if (hint) { hint.insertAdjacentHTML('beforebegin', pill); }
+    else { hero.insertAdjacentHTML('beforeend', pill); }
+  }
+}
 
 // icono trofeo outline (estilo trivia) ~ usado en el banner de campeon del Final Mode
 function icoTrophy() {
@@ -793,6 +828,8 @@ function renderKnockout(partidos) {
   var thirdMatch = partidos.filter(function(p) { return p.fase === 'Third Place'; })[0] || null;
   var finalReady = finalMatch && finalMatch.local && finalMatch.local.trim() && finalMatch.visitante && finalMatch.visitante.trim();
   grid.classList.toggle('final-mode-active', !!finalReady);
+  // recordar el estado para pintar la silueta en la proxima carga/refresh (no flashear la card gigante en modo normal)
+  if (finalReady) localStorage.setItem('vibeFinalMode', '1'); else localStorage.removeItem('vibeFinalMode');
   if (finalReady) { renderFinalMode(finalMatch, thirdMatch); return; }
 
   // index partidos by fase + side for lookup
@@ -1012,7 +1049,12 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
     if (res.error) { msg.textContent = res.error; msg.className = 'form-msg error'; return; }
     koPredictions[partidoId] = { gol_local: golL, gol_visitante: golV };
     msg.textContent = t('saved'); msg.className = 'form-msg success';
-    setTimeout(() => { closePredict(); showCardSkeleton(partidoId); loadKnockout(); }, 800);
+    setTimeout(() => {
+      closePredict();
+      // si la card gigante de Final Mode esta en pantalla, mostrar el pill "Saving"; si no, el skeleton normal de la carta
+      if (document.querySelector('.final-hero')) showFinalPredSaving(); else showCardSkeleton(partidoId);
+      loadKnockout();
+    }, 800);
   } catch { msg.textContent = t('conn_err'); msg.className = 'form-msg error'; }
 });
 
