@@ -1051,8 +1051,10 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
     msg.textContent = t('saved'); msg.className = 'form-msg success';
     setTimeout(() => {
       closePredict();
-      // si la card gigante de Final Mode esta en pantalla, mostrar el pill "Saving"; si no, el skeleton normal de la carta
-      if (document.querySelector('.final-hero')) showFinalPredSaving(); else showCardSkeleton(partidoId);
+      // el bonus (3er lugar) SI tiene su propia carta con data-pid aunque Final Mode este activo -> usar su skeleton normal.
+      // solo la Final gigante (KO-FINAL) no tiene data-pid: para esa usamos el pill "Saving" sobre la card gigante.
+      if (document.querySelector('[data-pid="' + partidoId + '"]')) showCardSkeleton(partidoId);
+      else if (document.querySelector('.final-hero')) showFinalPredSaving();
       loadKnockout();
     }, 800);
   } catch { msg.textContent = t('conn_err'); msg.className = 'form-msg error'; }
