@@ -78,6 +78,7 @@
 <section class="section hero" id="home">
   <div class="hero-content hero-content--results">
     <img src="vibe-logo.png" alt="VIBE" class="hero-logo">
+    <h1 class="hero-title"><span class="gradient-text" data-i18n="hero_title">World Cup Predictions 2026</span></h1>
 
     <!-- Podio Ganadores ~ pagina de resultados finales. Torres apoyadas en el inicio de Rules. Confeti al entrar en vista. -->
     <div class="podio" id="podio">
@@ -87,12 +88,24 @@
         <p class="podio-sub" data-i18n="podio_sub">The top 3 of the World Cup 2026 Pool</p>
       </div>
 
-      <!-- Rifa: pendiente de sorteo, pill compacto (no compite con el podio) -->
-      <div class="raffle-chip">
-        <span class="raffle-chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg></span>
-        <span class="raffle-chip-txt"><span data-i18n="prize_raffle">Raffle</span> &#8353;20,000</span>
-        <span class="raffle-chip-sep"></span>
-        <span class="raffle-chip-soon"><span class="dot"></span><span data-i18n="raffle_soon">Coming Soon</span></span>
+      <!-- Rifa: pendiente de sorteo, cuadro con borde electrico (estado coming soon), centrado -->
+      <div class="raffle-soon-wrap">
+        <div class="prize-card prize-card--raffle prize-card--soon">
+          <div class="prize-inner">
+            <div class="prize-border-outer"><div class="prize-border"></div></div>
+            <div class="glow-1"></div><div class="glow-2"></div>
+          </div>
+          <div class="overlay-1"></div><div class="overlay-2"></div>
+          <div class="bg-glow"></div>
+          <div class="prize-content">
+            <div class="prize-rank-badge" data-i18n="prize_raffle">Raffle</div>
+            <span class="prize-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg></span>
+            <div><div class="prize-amount-val">&#8353;20,000</div><div class="prize-currency" data-i18n="prize_raffle_desc">all participants</div></div>
+            <div class="prize-divider"></div>
+            <div class="prize-label">Everyone Eligible</div>
+          </div>
+          <div class="prize-soon-veil"><span class="prize-soon-tag"><span class="dot"></span><span data-i18n="raffle_soon">Coming Soon</span></span></div>
+        </div>
       </div>
 
       <div class="podio-stage">
