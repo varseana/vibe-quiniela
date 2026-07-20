@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<!-- canvas-confetti: celebracion del podio (CDN, sin API key) -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
 </head>
 <body>
 <div class="particles" id="particles"></div>
@@ -130,7 +132,7 @@
             <div class="prize-label">Third on the Board</div>
           </div>
         </div>
-        <div class="prize-card prize-card--raffle">
+        <div class="prize-card prize-card--raffle prize-card--soon">
           <div class="prize-inner">
             <div class="prize-border-outer"><div class="prize-border"></div></div>
             <div class="glow-1"></div><div class="glow-2"></div>
@@ -144,50 +146,39 @@
             <div class="prize-divider"></div>
             <div class="prize-label">Everyone Eligible</div>
           </div>
+          <div class="prize-soon-veil"><span class="prize-soon-tag"><span class="dot"></span><span data-i18n="raffle_soon">Coming Soon</span></span></div>
         </div>
       </div>
     </div>
 
-    <!-- Trivia Winners ~ reusa el estilo .trivia-cta. Gafete Phonetool se desliza en hover. -->
-    <div class="trivia-cta trivia-winners">
-      <div class="trivia-left">
-        <span class="trivia-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-          <span data-i18n="tw_badge">Trivia Winners</span>
-        </span>
-        <div class="trivia-title" data-i18n="tw_title">Congratulations to our winners</div>
-        <div class="trivia-desc" data-i18n-html="tw_desc">These three colleagues stood out for their <strong>accuracy and speed</strong> in the World Cup trivia and earned <strong>2 hours of NPT each</strong> to watch <strong>either the semifinal or the final</strong> live.</div>
-        <div class="trivia-perks">
-          <span class="trivia-perk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> <span data-i18n="tw_perk1">3 winners</span></span>
-          <span class="trivia-perk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span data-i18n="tw_perk2">2h NPT each</span></span>
-        </div>
+    <!-- Podio Ganadores ~ los 3 primeros lugares de la quiniela. Confeti al entrar en vista. -->
+    <div class="podio" id="podio">
+      <div class="podio-heading">
+        <span class="podio-badge" data-i18n="podio_badge">Final Results</span>
+        <div class="podio-title"><span class="gradient-text" data-i18n="podio_title">The VIBE Podium</span></div>
+        <p class="podio-sub" data-i18n="podio_sub">The top 3 of the World Cup 2026 Pool</p>
       </div>
-      <div class="trivia-right">
-        <div class="winners-list">
-          <div class="winner-item">
-            <div class="winner-badge"><img src="badge_mrisolb.png" alt="mrisolb Phonetool badge" loading="lazy"></div>
-            <div class="winner-row">
-              <span class="winner-medal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
-              <span class="winner-name">mrisolb</span>
-              <span class="winner-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></span>
-            </div>
-          </div>
-          <div class="winner-item">
-            <div class="winner-badge"><img src="badge_charpser.png" alt="charpser Phonetool badge" loading="lazy"></div>
-            <div class="winner-row">
-              <span class="winner-medal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
-              <span class="winner-name">charpser</span>
-              <span class="winner-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></span>
-            </div>
-          </div>
-          <div class="winner-item">
-            <div class="winner-badge"><img src="badge_alpmarco.png" alt="alpmarco Phonetool badge" loading="lazy"></div>
-            <div class="winner-row">
-              <span class="winner-medal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
-              <span class="winner-name">alpmarco</span>
-              <span class="winner-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></span>
-            </div>
-          </div>
+      <div class="podio-stage">
+        <div class="pod pod--2">
+          <div class="pod-badgewrap"><span class="pod-medal">2</span><img class="pod-badge" src="badge_jetsanag.png" alt="jetsanag Phonetool badge" loading="lazy"></div>
+          <div class="pod-name">jetsanag</div>
+          <div class="pod-place" data-i18n="prize_2nd">2nd Place</div>
+          <div class="pod-pts">&#8353;35,000</div>
+          <div class="pod-stand"><span class="pod-rank">2</span></div>
+        </div>
+        <div class="pod pod--1">
+          <div class="pod-badgewrap"><span class="pod-crown"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M3 8l3.5 3L12 4l5.5 7L21 8l-1.8 10.2a1 1 0 0 1-1 .8H5.8a1 1 0 0 1-1-.8L3 8z"/></svg></span><span class="pod-medal">1</span><img class="pod-badge" src="badge_larroyh.png" alt="larroyh Phonetool badge" loading="lazy"></div>
+          <div class="pod-name">larroyh</div>
+          <div class="pod-place" data-i18n="podio_champ">Champion</div>
+          <div class="pod-pts">&#8353;50,000</div>
+          <div class="pod-stand"><span class="pod-rank">1</span></div>
+        </div>
+        <div class="pod pod--3">
+          <div class="pod-badgewrap"><span class="pod-medal">3</span><img class="pod-badge" src="badge_elchaves.png" alt="elchaves Phonetool badge" loading="lazy"></div>
+          <div class="pod-name">elchaves</div>
+          <div class="pod-place" data-i18n="prize_3rd">3rd Place</div>
+          <div class="pod-pts">&#8353;25,000</div>
+          <div class="pod-stand"><span class="pod-rank">3</span></div>
         </div>
       </div>
     </div>
