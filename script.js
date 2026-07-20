@@ -614,7 +614,9 @@ document.getElementById('chgPwClose').addEventListener('click', closeChangePassw
 document.getElementById('changePasswordOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeChangePassword(); });
 document.getElementById('predictClose').addEventListener('click', closePredict);
 document.getElementById('predictOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closePredict(); });
-document.getElementById('btnRegister').addEventListener('click', () => { getUser() ? document.getElementById('partidos').scrollIntoView({behavior:'smooth'}) : openRegister(); });
+// btnRegister removido en la pagina de resultados finales ~ guard por si no existe
+var _btnReg = document.getElementById('btnRegister');
+if (_btnReg) _btnReg.addEventListener('click', () => { getUser() ? document.getElementById('partidos').scrollIntoView({behavior:'smooth'}) : openRegister(); });
 
 // switch between login/register
 document.getElementById('switchToLogin').addEventListener('click', (e) => { e.preventDefault(); closeRegister(); openLogin(); });
