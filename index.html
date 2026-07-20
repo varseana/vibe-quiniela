@@ -89,23 +89,36 @@
         <p class="podio-sub" data-i18n="podio_sub">The top 3 of the World Cup 2026 Pool</p>
       </div>
 
-      <!-- Rifa: pendiente de sorteo, cuadro con borde electrico (estado coming soon), centrado -->
-      <div class="raffle-soon-wrap">
-        <div class="prize-card prize-card--raffle prize-card--soon">
-          <div class="prize-inner">
-            <div class="prize-border-outer"><div class="prize-border"></div></div>
-            <div class="glow-1"></div><div class="glow-2"></div>
-          </div>
+      <!-- Rifa: sorteo con slot machine (borde electrico). Gira automatico al hacer scroll. -->
+      <div class="rifa-card-wrap">
+        <div class="rifa-card prize-card--raffle" id="rifaCard">
+          <div class="rifa-card-border"></div>
+          <div class="glow-1"></div><div class="glow-2"></div>
           <div class="overlay-1"></div><div class="overlay-2"></div>
           <div class="bg-glow"></div>
-          <div class="prize-content">
-            <div class="prize-rank-badge" data-i18n="prize_raffle">Raffle</div>
-            <span class="prize-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg></span>
-            <div><div class="prize-amount-val">&#8353;17,000</div><div class="prize-currency" data-i18n="prize_raffle_desc">all participants</div></div>
-            <div class="prize-divider"></div>
-            <div class="prize-label">Everyone Eligible</div>
+          <div class="rifa-card-content">
+            <span class="rifa-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+              <span data-i18n="rifa_pill">Raffle</span>
+            </span>
+            <div class="rifa-heading" data-i18n="rifa_heading">Raffle Winner</div>
+            <div class="rifa-subline" data-i18n="rifa_subline">Drawn live from all participants &#8226; &#8353;17,000</div>
+            <div class="rifa-row">
+              <div class="slot">
+                <span class="slot-side l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8l7-5 7 5"/></svg></span>
+                <span class="slot-side r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 16l7 5 7-5"/></svg></span>
+                <div class="slot-frame">
+                  <div class="slot-win"></div>
+                  <div class="slot-reel" id="slotReel"></div>
+                </div>
+              </div>
+              <div class="rifa-badge" id="rifaBadge">
+                <div class="badge-myst">?</div>
+                <img src="badge_quesagar.png" alt="quesagar Phonetool badge" loading="lazy">
+              </div>
+            </div>
+            <div class="rifa-text" id="rifaText"></div>
           </div>
-          <div class="prize-soon-veil"><span class="prize-soon-tag"><span class="dot"></span><span data-i18n="raffle_soon">Coming Soon</span></span></div>
         </div>
       </div>
 

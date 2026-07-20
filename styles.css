@@ -289,16 +289,70 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .prize-card--3rd { --c: #cd7f32; --c-mid: rgba(205,127,50,.5); --c-faint: rgba(205,127,50,.08); }
 .prize-card--raffle { --c: #9b30ff; --c-mid: rgba(155,48,255,.5); --c-faint: rgba(155,48,255,.08); }
 
-/* raffle en estado "coming soon" ~ velo difuminado sobre el contenido (no tapa el pill RAFFLE) */
-.prize-card--soon .prize-content { z-index: 3; }
-.prize-soon-veil { position: absolute; left: 3px; right: 3px; bottom: 3px; top: 54px; z-index: 4;
-  border-radius: 0 0 calc(var(--radius-md) - 2px) calc(var(--radius-md) - 2px);
-  background: rgba(14,14,34,0.32); backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px);
-  display: flex; align-items: center; justify-content: center; pointer-events: none; }
-.prize-soon-tag { display: inline-flex; align-items: center; gap: 7px; padding: 8px 15px; border-radius: 10px;
-  font-family: var(--font-display); font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #fff;
-  background: rgba(155,48,255,.18); border: 1px solid rgba(155,48,255,.45); box-shadow: 0 0 20px rgba(155,48,255,.3); }
-.prize-soon-tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--vibe-pink); box-shadow: 0 0 8px var(--vibe-pink); animation: pulseGlow 1.8s ease-in-out infinite; }
+/* ⁘[ RIFA · SLOT MACHINE ]⁘ cuadro con borde electrico adaptable (altura variable). Gira auto al scroll. */
+.rifa-card-wrap { display: flex; justify-content: center; margin: 0 auto 44px; width: 100%; }
+.rifa-card { position: relative; width: min(720px, 100%); padding: 3px; border-radius: var(--radius-md);
+  background: linear-gradient(-30deg, var(--c-faint), transparent, var(--c-faint)), linear-gradient(to bottom, oklch(0.13 0 0), oklch(0.13 0 0)); }
+/* borde electrico: capa absoluta que se estira a todo el alto (usa el filtro turbulent-displace del sitio) */
+.rifa-card-border { position: absolute; inset: -3px; border-radius: var(--radius-md); border: 2px solid var(--c); filter: url(#turbulent-displace); pointer-events: none; }
+.rifa-card .glow-1 { border: 2px solid var(--c-mid); border-radius: var(--radius-md); position: absolute; inset: 0; filter: blur(1px); pointer-events: none; }
+.rifa-card .glow-2 { border: 2px solid var(--c); border-radius: var(--radius-md); position: absolute; inset: 0; filter: blur(4px); pointer-events: none; }
+.rifa-card .overlay-1, .rifa-card .overlay-2 { position: absolute; inset: 0; border-radius: var(--radius-md); mix-blend-mode: overlay; transform: scale(1.06); filter: blur(16px); pointer-events: none; background: linear-gradient(-30deg, white, transparent 30%, transparent 70%, white); }
+.rifa-card .overlay-1 { opacity: .22; } .rifa-card .overlay-2 { opacity: .11; }
+.rifa-card .bg-glow { position: absolute; inset: 0; border-radius: var(--radius-md); filter: blur(32px); transform: scale(1.08); opacity: .09; z-index: -1; background: linear-gradient(-30deg, var(--c), transparent, var(--c)); pointer-events: none; }
+.rifa-card-content { position: relative; z-index: 2; border-radius: calc(var(--radius-md) - 2px); overflow: hidden;
+  background: radial-gradient(ellipse at 50% 0%, rgba(155,48,255,.10), transparent 60%), rgba(10,10,24,.55);
+  padding: 26px 24px 30px; text-align: center; }
+.rifa-pill { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 50px; background: rgba(155,48,255,.14); border: 1px solid rgba(155,48,255,.3);
+  font-family: var(--font-display); font-weight: 800; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--vibe-pink); }
+.rifa-pill svg { width: 13px; height: 13px; }
+.rifa-heading { font-family: var(--font-display); font-weight: 800; font-size: 22px; margin: 12px 0 4px; color: var(--text-primary); }
+.rifa-subline { font-size: 13px; color: var(--text-secondary); margin-bottom: 22px; }
+
+/* fila: slot (izq) + badge (der) */
+.rifa-row { display: flex; align-items: center; justify-content: center; gap: 34px; flex-wrap: wrap; }
+.slot { position: relative; width: 230px; }
+.slot-frame { position: relative; height: 150px; border-radius: 16px; overflow: hidden; background: #07070f;
+  box-shadow: 0 0 0 2px rgba(155,48,255,.4), 0 0 26px rgba(155,48,255,.22), inset 0 0 40px rgba(0,0,0,.75); }
+.slot-frame::before, .slot-frame::after { content: ''; position: absolute; left: 0; right: 0; height: 50px; z-index: 3; pointer-events: none; }
+.slot-frame::before { top: 0; background: linear-gradient(180deg, #07070f, transparent); }
+.slot-frame::after { bottom: 0; background: linear-gradient(0deg, #07070f, transparent); }
+.slot-win { position: absolute; top: 50px; left: 0; right: 0; height: 50px; z-index: 2; pointer-events: none;
+  border-top: 2px solid rgba(255,215,0,.5); border-bottom: 2px solid rgba(255,215,0,.5); background: rgba(255,215,0,.05); }
+.slot-reel { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+.slot-item { height: 50px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; font-size: 19px; color: var(--text-primary); }
+.slot-reel.spinning .slot-item { filter: blur(5px); opacity: .6; }
+.slot-reel.settled .slot-item:not(.winner) { filter: blur(3px); opacity: .32; }
+.slot-item.winner { color: #ffd700; font-size: 23px; text-shadow: 0 0 18px rgba(255,215,0,.5);
+  transition: font-size .4s var(--ease), color .4s var(--ease), text-shadow .4s var(--ease); }
+.slot-side { position: absolute; top: 50%; transform: translateY(-50%); color: #ffd700; filter: drop-shadow(0 0 8px rgba(255,215,0,.5)); z-index: 4; }
+.slot-side svg { width: 18px; height: 18px; }
+.slot-side.l { left: -28px; } .slot-side.r { right: -28px; }
+
+/* badge misterioso -> gafete real */
+.rifa-badge { position: relative; width: 122px; min-height: 150px; display: flex; align-items: center; justify-content: center; }
+.badge-myst { width: 112px; height: 150px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(160deg, rgba(155,48,255,.10), rgba(255,255,255,.02)); border: 1px dashed rgba(255,255,255,.18);
+  font-family: var(--font-display); font-weight: 900; font-size: 44px; color: var(--text-muted); transition: opacity .35s var(--ease); }
+.rifa-badge img { position: absolute; inset: 0; margin: auto; width: 118px; height: auto; border-radius: 12px;
+  filter: drop-shadow(0 0 26px rgba(255,215,0,.45)) drop-shadow(0 14px 30px rgba(0,0,0,.5));
+  opacity: 0; transform: scale(.88); transition: opacity .5s var(--ease), transform .6s cubic-bezier(.34,1.56,.64,1); }
+.rifa-badge.revealed .badge-myst { opacity: 0; }
+.rifa-badge.revealed img { opacity: 1; transform: none; }
+
+/* texto (abajo, centrado) */
+.rifa-text { margin-top: 22px; opacity: 0; transform: translateY(16px); max-height: 0; overflow: hidden;
+  transition: opacity .55s var(--ease), transform .6s var(--ease), max-height .6s var(--ease); }
+.rifa-text.show { opacity: 1; transform: none; max-height: 220px; }
+.rifa-text .tag { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 800; font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; color: #ffd700; }
+.rifa-text .tag svg { width: 15px; height: 15px; }
+.rifa-text .nm { font-family: var(--font-display); font-weight: 900; font-size: 30px; line-height: 1.1; margin-top: 8px;
+  background: linear-gradient(120deg, #ffd700, var(--vibe-pink)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.rifa-text .al { font-size: 14px; color: var(--text-secondary); margin-top: 2px; }
+.rifa-text .prize { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; padding: 8px 18px; border-radius: 50px;
+  background: rgba(255,215,0,.1); border: 1px solid rgba(255,215,0,.35); font-family: var(--font-display); font-weight: 800; font-size: 15px; color: #ffd700; }
+.rifa-text .prize svg { width: 16px; height: 16px; }
+@media (max-width: 520px) { .slot-side { display: none; } }
 
 /* trivia challenge CTA (debajo de los premios) */
 .trivia-cta {

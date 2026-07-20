@@ -43,6 +43,7 @@ const T = {
     btn_logout:'Logout', btn_change_pw:'Change Password', your_pick:'Your pick:', no_pick:'No pick yet', saved:'Saved!', sending:'Sending...', registering:'Registering...', registered:'Registered!', conn_err:'Connection error', logging_in:'Logging in...', logged_in:'Welcome back!', your_pred:'Your prediction',
     chg_pw_title:'Change Password', chg_pw_current:'Current Password', chg_pw_new:'New Password', chg_pw_confirm:'Confirm New Password', chg_pw_submit:'Change', pw_changed:'Password changed!',
     prizes_title:'Prizes', prize_1st:'1st Place', prize_2nd:'2nd Place', prize_3rd:'3rd Place', prize_raffle:'Raffle', prize_raffle_desc:'all participants', raffle_soon:'Coming Soon',
+    rifa_pill:'Raffle', rifa_heading:'Raffle Winner', rifa_subline:'Drawn from all participants • ₡17,000', rifa_winner_tag:'Raffle Winner',
     trivia_badge:'Trivia Challenge', trivia_title:'Think you know the World Cup?', trivia_desc:'Test your knowledge and earn your spot to watch the semifinals <strong>or</strong> final. 3 winners get 2 hours of NPT each to catch the games live.',
     trivia_perk1:'3 winners', trivia_perk2:'2h NPT each', trivia_perk3:'Semis or Final', trivia_closes:'Closes in', trivia_deadline:'Deadline: July 12, 2026', trivia_cta:'Take the Trivia',
     podio_badge:'Final Results', podio_title:'The VIBE Podium', podio_sub:'The top 3 of the World Cup 2026 Pool', podio_champ:'Champion',
@@ -74,6 +75,7 @@ const T = {
     btn_logout:'Salir', btn_change_pw:'Cambiar Contrasena', your_pick:'Tu eleccion:', no_pick:'Sin eleccion aun', saved:'Guardado!', sending:'Enviando...', registering:'Registrando...', registered:'Registrado!', conn_err:'Error de conexion', logging_in:'Ingresando...', logged_in:'Bienvenido!', your_pred:'Tu prediccion',
     chg_pw_title:'Cambiar Contrasena', chg_pw_current:'Contrasena Actual', chg_pw_new:'Nueva Contrasena', chg_pw_confirm:'Confirmar Nueva', chg_pw_submit:'Cambiar', pw_changed:'Contrasena cambiada!',
     prizes_title:'Premios', prize_1st:'1er Lugar', prize_2nd:'2do Lugar', prize_3rd:'3er Lugar', prize_raffle:'Rifa', prize_raffle_desc:'todos los participantes', raffle_soon:'Proximamente',
+    rifa_pill:'Rifa', rifa_heading:'Ganador de la Rifa', rifa_subline:'Sorteado entre todos los participantes • ₡17,000', rifa_winner_tag:'Ganador de la Rifa',
     trivia_badge:'Reto de Trivia', trivia_title:'Crees que sabes del Mundial?', trivia_desc:'Pon a prueba tu conocimiento y ganate tu lugar para ver las semifinales <strong>o</strong> la final. 3 ganadores reciben 2 horas de NPT cada uno para ver los partidos en vivo.',
     trivia_perk1:'3 ganadores', trivia_perk2:'2h NPT c/u', trivia_perk3:'Semis o Final', trivia_closes:'Cierra en', trivia_deadline:'Fecha limite: 12 de Julio, 2026', trivia_cta:'Hacer la Trivia',
     podio_badge:'Resultados Finales', podio_title:'El Podio VIBE', podio_sub:'El top 3 de la Quiniela Mundial 2026', podio_champ:'Campeon',
@@ -1180,4 +1182,65 @@ document.getElementById('predictForm').addEventListener('submit', async (e) => {
     });
   }, { threshold: 0.4 });
   obs.observe(podio);
+})();
+
+// rifa · slot machine ~ gira automatico una sola vez cuando entra en vista
+(function() {
+  var card = document.getElementById('rifaCard');
+  var reel = document.getElementById('slotReel');
+  var badge = document.getElementById('rifaBadge');
+  var text = document.getElementById('rifaText');
+  if (!card || !reel) return;
+
+  var WINNER = { alias: 'quesagar', name: 'Paul' };
+  var POOL = ['varseana','arguesha','fiorejr','fccastl','jasaguer','larroyh','jetsanag','elchaves','chrquiro','davivene','quesagar'];
+  var ITEM_H = 50;
+  var confColors = ['#ffd700','#c0c0dc','#9b30ff','#c850c0','#ff6ec7','#4158d0'];
+  var ICON_TROPHY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
+  var ICON_TICKET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>';
+
+  // construir rodillo; ganador cerca del final
+  var seq = []; for (var i = 0; i < 58; i++) { seq.push(POOL[(i * 3 + 1) % POOL.length]); }
+  var WIN_INDEX = 53; seq[WIN_INDEX] = WINNER.alias;
+  seq.forEach(function(a) { var d = document.createElement('div'); d.className = 'slot-item'; d.textContent = a; reel.appendChild(d); });
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function reveal() {
+    reel.classList.remove('spinning'); reel.classList.add('settled');
+    reel.children[WIN_INDEX].classList.add('winner');
+    badge.classList.add('revealed');
+    var tagTxt = (typeof t === 'function') ? t('rifa_winner_tag') : 'Raffle Winner';
+    text.innerHTML = '<div class="tag">' + ICON_TROPHY + ' <span data-i18n="rifa_winner_tag">' + tagTxt + '</span></div>'
+      + '<div class="nm">' + WINNER.name + '</div><div class="al">' + WINNER.alias + '@</div>'
+      + '<div class="prize">' + ICON_TICKET + ' &#8353;17,000</div>';
+    requestAnimationFrame(function() { text.classList.add('show'); });
+    if (typeof confetti === 'function' && !reduce) {
+      var end = Date.now() + 1400;
+      (function frame() {
+        confetti({ particleCount: 4, angle: 60, spread: 62, origin: { x: 0 }, colors: confColors });
+        confetti({ particleCount: 4, angle: 120, spread: 62, origin: { x: 1 }, colors: confColors });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
+      confetti({ particleCount: 130, spread: 95, origin: { y: 0.5 }, colors: confColors });
+    }
+  }
+
+  function spin() {
+    if (reduce) { reveal(); return; }  // sin animacion: mostrar ganador directo
+    reel.classList.add('spinning');
+    var target = WIN_INDEX * ITEM_H - ITEM_H;
+    reel.style.transition = 'transform 4.8s cubic-bezier(.09,.82,.16,1)';
+    reel.style.transform = 'translateY(' + (-target) + 'px)';
+    setTimeout(reveal, 4900);
+  }
+
+  if (typeof IntersectionObserver === 'undefined') { spin(); return; }
+  var fired = false;
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting && !fired) { fired = true; setTimeout(spin, 350); obs.disconnect(); }
+    });
+  }, { threshold: 0.5 });
+  obs.observe(card);
 })();
