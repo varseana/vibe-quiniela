@@ -45,7 +45,7 @@ const T = {
     prizes_title:'Prizes', prize_1st:'1st Place', prize_2nd:'2nd Place', prize_3rd:'3rd Place', prize_raffle:'Raffle', prize_raffle_desc:'all participants', raffle_soon:'Coming Soon',
     trivia_badge:'Trivia Challenge', trivia_title:'Think you know the World Cup?', trivia_desc:'Test your knowledge and earn your spot to watch the semifinals <strong>or</strong> final. 3 winners get 2 hours of NPT each to catch the games live.',
     trivia_perk1:'3 winners', trivia_perk2:'2h NPT each', trivia_perk3:'Semis or Final', trivia_closes:'Closes in', trivia_deadline:'Deadline: July 12, 2026', trivia_cta:'Take the Trivia',
-    podio_badge:'Final Results', podio_title:'The VIBE Podium', podio_sub:'The top 3 of the World Cup 2026 Pool', podio_champ:'Champion',
+    podio_badge:'Final Results', podio_title:'The VIBE Podium', podio_sub:'The top 3 of the World Cup 2026 Pool', podio_champ:'Champion', podio_note:'*Prize pool update as of 7/20/2026',
   },
   es: {
     nav_home:'Inicio', nav_champion:'Bonus', nav_matches:'Partidos', nav_rules:'Reglas', nav_register:'Registrarse', nav_login:'Ingresar',
@@ -76,7 +76,7 @@ const T = {
     prizes_title:'Premios', prize_1st:'1er Lugar', prize_2nd:'2do Lugar', prize_3rd:'3er Lugar', prize_raffle:'Rifa', prize_raffle_desc:'todos los participantes', raffle_soon:'Proximamente',
     trivia_badge:'Reto de Trivia', trivia_title:'Crees que sabes del Mundial?', trivia_desc:'Pon a prueba tu conocimiento y ganate tu lugar para ver las semifinales <strong>o</strong> la final. 3 ganadores reciben 2 horas de NPT cada uno para ver los partidos en vivo.',
     trivia_perk1:'3 ganadores', trivia_perk2:'2h NPT c/u', trivia_perk3:'Semis o Final', trivia_closes:'Cierra en', trivia_deadline:'Fecha limite: 12 de Julio, 2026', trivia_cta:'Hacer la Trivia',
-    podio_badge:'Resultados Finales', podio_title:'El Podio VIBE', podio_sub:'El top 3 de la Quiniela Mundial 2026', podio_champ:'Campeon',
+    podio_badge:'Resultados Finales', podio_title:'El Podio VIBE', podio_sub:'El top 3 de la Quiniela Mundial 2026', podio_champ:'Campeon', podio_note:'*Actualizacion del premio al 20/7/2026',
   }
 };
 

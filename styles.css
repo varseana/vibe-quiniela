@@ -340,6 +340,7 @@ tr.rank-3.current-user .user-alias { color: #cd7f32; }
 .podio-badge { display: inline-block; padding: 4px 16px; border-radius: 50px; background: var(--surface); border: 1px solid var(--glass-border); font-size: 11px; font-weight: 700; color: var(--vibe-purple); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
 .podio-title { font-family: var(--font-display); font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; }
 .podio-sub { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
+.podio-note { font-size: 11px; color: var(--text-muted); margin-top: 10px; font-style: italic; letter-spacing: .3px; }
 /* colores por lugar */
 .pod--1 { --pc: #ffd700; --pc-mid: rgba(255,215,0,.5); --pc-faint: rgba(255,215,0,.10); }
 .pod--2 { --pc: #c0c0dc; --pc-mid: rgba(192,192,220,.5); --pc-faint: rgba(192,192,220,.10); }
